@@ -109,7 +109,7 @@ namespace Login
                 {
                     if (Data.SubjectsInCourses[i].Name == change_calification_cb.SelectedItem.ToString())
                     {
-                        if (Data.SubjectsInCourses.Count > change_calification_grid.Rows.Count)
+                        if (Data.SubjectsInCourses.Count >= change_calification_grid.Rows.Count)
                         {
                             Student student = Data.SubjectsInCourses[i].Student;
                             change_calification_grid.Rows.Add();
@@ -121,8 +121,6 @@ namespace Login
                 }
 
             }
-
-
         }
 
         private void create_exam_cancel_Click(object sender, EventArgs e)
@@ -233,6 +231,13 @@ namespace Login
             ProfessorForm newForm = new(loggedProfessor);
             newForm.Closed += (s, args) => this.Close();
             newForm.Show();
+        }
+
+        private void professor_form_exit_Click(object sender, EventArgs e)
+        {
+            Login fa = new Login();
+            this.Hide();
+            fa.Show();
         }
     }
 }

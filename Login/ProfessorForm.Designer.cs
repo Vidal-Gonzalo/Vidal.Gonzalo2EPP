@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProfessorForm));
             this.label1 = new System.Windows.Forms.Label();
             this.assigned_subjects_grid = new System.Windows.Forms.DataGridView();
             this.assigned_subject_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -61,6 +62,7 @@
             this.exam_changing_califications_cb = new System.Windows.Forms.ComboBox();
             this.change_exam_button = new System.Windows.Forms.Button();
             this.exam_changing_calification_name = new System.Windows.Forms.Label();
+            this.professor_form_exit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.assigned_subjects_grid)).BeginInit();
             this.create_exam_grid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.change_calification_grid)).BeginInit();
@@ -380,11 +382,22 @@
             this.exam_changing_calification_name.TabIndex = 0;
             this.exam_changing_calification_name.Text = "Exam";
             // 
+            // professor_form_exit
+            // 
+            this.professor_form_exit.Location = new System.Drawing.Point(761, 12);
+            this.professor_form_exit.Name = "professor_form_exit";
+            this.professor_form_exit.Size = new System.Drawing.Size(75, 23);
+            this.professor_form_exit.TabIndex = 13;
+            this.professor_form_exit.Text = "Salir";
+            this.professor_form_exit.UseVisualStyleBackColor = true;
+            this.professor_form_exit.Click += new System.EventHandler(this.professor_form_exit_Click);
+            // 
             // ProfessorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 480);
+            this.Controls.Add(this.professor_form_exit);
             this.Controls.Add(this.exam_changing_calification);
             this.Controls.Add(this.change_calification_gb);
             this.Controls.Add(this.change_calification_grid);
@@ -397,8 +410,9 @@
             this.Controls.Add(this.professor_form_greeting);
             this.Controls.Add(this.create_exam_grid);
             this.Controls.Add(this.assigned_subjects_grid);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ProfessorForm";
-            this.Text = "Form4";
+            this.Text = "Formulario de profesor";
             this.Load += new System.EventHandler(this.Form4_Load);
             ((System.ComponentModel.ISupportInitialize)(this.assigned_subjects_grid)).EndInit();
             this.create_exam_grid.ResumeLayout(false);
@@ -449,5 +463,6 @@
         private System.Windows.Forms.Button change_calification_back;
         private System.Windows.Forms.DataGridViewTextBoxColumn student_exams;
         private System.Windows.Forms.DataGridViewTextBoxColumn student_califications;
+        private System.Windows.Forms.Button professor_form_exit;
     }
 }

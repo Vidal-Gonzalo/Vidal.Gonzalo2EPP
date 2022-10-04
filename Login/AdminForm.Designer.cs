@@ -494,7 +494,7 @@
             this.label5.TabIndex = 0;
             this.label5.Text = "Asignar profesor a materia";
             // 
-            // Form2
+            // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -506,8 +506,8 @@
             this.Controls.Add(this.subject_status_section);
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form2";
-            this.Text = "Form2";
+            this.Name = "AdminForm";
+            this.Text = "Formulario de administrador";
             this.Load += new System.EventHandler(this.Form2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.students_names)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.student_subjects)).EndInit();

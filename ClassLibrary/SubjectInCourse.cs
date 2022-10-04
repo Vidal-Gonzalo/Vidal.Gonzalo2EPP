@@ -31,6 +31,14 @@ namespace ClassLibrary
             _exams = exams;
         }
 
+        public SubjectInCourse(short status, string name, Student student)
+        {
+            _status = status;
+            _name = name;
+            _student = student;
+            _exams = new List<Exam>();
+        }
+
         public short Status { get { return _status; } set { _status = value; } }
 
         public string Name { get { return _name; } }

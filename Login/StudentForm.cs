@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,7 +14,7 @@ namespace Login
 {
     public partial class StudentForm : Form
     {
-        Student loggedStudent = new(); 
+        Student loggedStudent = new();
         public StudentForm(Student student)
         {
             InitializeComponent();
@@ -22,12 +23,70 @@ namespace Login
 
         private void Form3_Load(object sender, EventArgs e)
         {
+            student_greeting.Text = $"Hola {loggedStudent.Email}!";
+
+            for (int i = 0; i < Data.Subjects.Count; i++)
+            {
+                register_subject_cb.Items.Add(Data.Subjects[i].Name);
+            }
+
+            for (int i = 0; i < Data.SubjectsInCourses.Count; i++)
+            {
+                if (Data.SubjectsInCourses[i].Student.Email == loggedStudent.Email)
+                {
+                    if (Data.SubjectsInCourses.Count >= subjects_list.Rows.Count)
+                    {
+                        subjects_list.Rows.Add();
+                        subjects_list.Rows[i].Cells[0].Value = Data.SubjectsInCourses[i].Name;
+                        var lista = Data.SubjectsInCourses[i].Exams.Select(x => x.Calification.ToString()).ToList();
+                        var finalString = string.Join(",", lista);
+                        subjects_list.Rows[i].Cells[1].Value = finalString;
+                    }
+                }
+            }
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+
+        private void student_form_exit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Login fa = new Login();
+            this.Hide();
+            fa.Show();
+        }
+
+        private void register_subject_cb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void register_subject_button_Click(object sender, EventArgs e)
+        {
+            string? subjectAux = register_subject_cb.SelectedItem.ToString();
+            if (subjectAux is not null)
+            {
+                string subject = subjectAux;
+                bool isRegistered = Data.CheckIfSubjectContainsStudent(subject, loggedStudent.Email);
+                if (!isRegistered)
+                {
+                    SubjectInCourse subjectInCourse = new(1, subject, loggedStudent);
+                    Data.SubjectsInCourses.Add(subjectInCourse);
+                    MessageBox.Show("Inscripción realizada con exito!");
+                    RefreshForm();
+                }
+                else
+                {
+                    MessageBox.Show("Ya éstás inscripto en esa materia!");
+                }
+            }
+        }
+
+        private void RefreshForm()
+        {
+            Hide();
+            StudentForm newForm = new(loggedStudent);
+            newForm.Closed += (s, args) => this.Close();
+            newForm.Show();
         }
     }
 }

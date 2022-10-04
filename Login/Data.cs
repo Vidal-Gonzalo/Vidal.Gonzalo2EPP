@@ -41,11 +41,9 @@ namespace Login
             #endregion
             #region Subjects in course
             SubjectInCourse subjectInCourse1 = new(1, "Matematica", hardCodedStudent1, _exams);
-            SubjectInCourse subjectInCourse2 = new(1, "Física", hardCodedStudent1, _exams);
             SubjectInCourse subjectInCourse3 = new(1, "Programacion", hardCodedStudent2, _exams);
             SubjectInCourse subjectInCourse4 = new(1, "Química", hardCodedStudent2, _exams);
             _subjectsInCourse1.Add(subjectInCourse1);
-            _subjectsInCourse1.Add(subjectInCourse2);
             _subjectsInCourse2.Add(subjectInCourse3);
             _subjectsInCourse2.Add(subjectInCourse4);
             hardCodedStudent1.SubjectsInCourse = _subjectsInCourse1;
@@ -194,6 +192,26 @@ namespace Login
                 }
             }
             return null;
+        }
+
+
+        public static bool CheckIfSubjectContainsStudent(string subject, string student)
+        {
+            bool r = false;
+            if (student != "")
+            {
+                foreach (SubjectInCourse item in SubjectsInCourses)
+                {
+                    if(item.Name == subject)
+                    {
+                        if(item.StudentEmail == student)
+                        {
+                            r = true;
+                        }
+                    }
+                }
+            }
+            return r;
         }
 
     }
