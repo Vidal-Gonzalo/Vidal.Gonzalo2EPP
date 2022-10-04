@@ -71,6 +71,12 @@
             this.label10 = new System.Windows.Forms.Label();
             this.to_assign_professor = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.register_subject_title = new System.Windows.Forms.Label();
+            this.register_subject_cb_subject = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.register_subject_cb_student = new System.Windows.Forms.ComboBox();
+            this.register_subject_button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.students_names)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.student_subjects)).BeginInit();
             this.user_register_section.SuspendLayout();
@@ -494,11 +500,70 @@
             this.label5.TabIndex = 0;
             this.label5.Text = "Asignar profesor a materia";
             // 
+            // register_subject_title
+            // 
+            this.register_subject_title.AutoSize = true;
+            this.register_subject_title.Location = new System.Drawing.Point(382, 567);
+            this.register_subject_title.Name = "register_subject_title";
+            this.register_subject_title.Size = new System.Drawing.Size(145, 15);
+            this.register_subject_title.TabIndex = 19;
+            this.register_subject_title.Text = "Inscribir alumno a materia";
+            // 
+            // register_subject_cb_subject
+            // 
+            this.register_subject_cb_subject.FormattingEnabled = true;
+            this.register_subject_cb_subject.Location = new System.Drawing.Point(382, 611);
+            this.register_subject_cb_subject.Name = "register_subject_cb_subject";
+            this.register_subject_cb_subject.Size = new System.Drawing.Size(145, 23);
+            this.register_subject_cb_subject.TabIndex = 20;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(382, 593);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(47, 15);
+            this.label12.TabIndex = 21;
+            this.label12.Text = "Materia";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(382, 637);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(50, 15);
+            this.label13.TabIndex = 22;
+            this.label13.Text = "Alumno";
+            // 
+            // register_subject_cb_student
+            // 
+            this.register_subject_cb_student.FormattingEnabled = true;
+            this.register_subject_cb_student.Location = new System.Drawing.Point(382, 655);
+            this.register_subject_cb_student.Name = "register_subject_cb_student";
+            this.register_subject_cb_student.Size = new System.Drawing.Size(145, 23);
+            this.register_subject_cb_student.TabIndex = 23;
+            // 
+            // register_subject_button
+            // 
+            this.register_subject_button.Location = new System.Drawing.Point(566, 629);
+            this.register_subject_button.Name = "register_subject_button";
+            this.register_subject_button.Size = new System.Drawing.Size(75, 23);
+            this.register_subject_button.TabIndex = 24;
+            this.register_subject_button.Text = "Inscribir";
+            this.register_subject_button.UseVisualStyleBackColor = true;
+            this.register_subject_button.Click += new System.EventHandler(this.register_subject_button_Click);
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(865, 560);
+            this.ClientSize = new System.Drawing.Size(865, 749);
+            this.Controls.Add(this.register_subject_button);
+            this.Controls.Add(this.register_subject_cb_student);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.register_subject_cb_subject);
+            this.Controls.Add(this.register_subject_title);
             this.Controls.Add(this.to_assign_section);
             this.Controls.Add(this.title_admin);
             this.Controls.Add(this.user_register_section);
@@ -569,5 +634,11 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox to_assign_professor;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label register_subject_title;
+        private System.Windows.Forms.ComboBox register_subject_cb_subject;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox register_subject_cb_student;
+        private System.Windows.Forms.Button register_subject_button;
     }
 }

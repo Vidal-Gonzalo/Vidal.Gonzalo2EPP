@@ -15,6 +15,7 @@ namespace ClassLibrary
         private Student _student;
         private List<Exam> _exams;
 
+
         public SubjectInCourse()
         {
             _status = -1;

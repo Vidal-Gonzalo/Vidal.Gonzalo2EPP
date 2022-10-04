@@ -31,32 +31,29 @@ namespace Login
             if (userAux is not null)
             {
                 User loggedUser = userAux;
-                if (loggedUser is not null)
+                Type userType = loggedUser.GetType();
+                Hide();
+                switch (userType.Name)
                 {
-                    Type userType = loggedUser.GetType();
-                    Hide();
-                    switch (userType.Name)
-                    {
-                        case "Admin":
-                            AdminForm fa = new((Admin)loggedUser);
-                            fa.Show();
-                            break;
-                        case "Student":
-                            StudentForm fs = new((Student)loggedUser);
-                            fs.Show();
-                            break;
-                        case "Professor":
-                            ProfessorForm fp = new((Professor)loggedUser);
-                            fp.Show();
-                            break;
-                        default:
-                            break;
-                    }
+                    case "Admin":
+                        AdminForm fa = new((Admin)loggedUser);
+                        fa.Show();
+                        break;
+                    case "Student":
+                        StudentForm fs = new((Student)loggedUser);
+                        fs.Show();
+                        break;
+                    case "Professor":
+                        ProfessorForm fp = new((Professor)loggedUser);
+                        fp.Show();
+                        break;
+                    default:
+                        break;
                 }
-                else
-                {
-                    MessageBox.Show("Usuario y/o contraseña incorrectos");
-                }
+            }
+            else
+            {
+                MessageBox.Show("Usuario y/o contraseña incorrectos");
             }
 
 

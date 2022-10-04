@@ -214,6 +214,19 @@ namespace Login
             return r;
         }
 
+        public static bool CorrectNumberOfSubjects(int max, Student student)
+        {
+            bool r = false;
+            if(max >= 0 && student is not null)
+            {
+                if(student.SubjectsInCourse.Count < max)
+                {
+                    r = true;
+                }
+            }
+            return r;
+        }
+
     }
 }
 

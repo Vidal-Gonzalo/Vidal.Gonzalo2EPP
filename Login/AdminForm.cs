@@ -35,11 +35,13 @@ namespace Login
             this.title_admin.Text = $"Hola {loggedAdmin.Email}!";
             for (int i = 0; i < Data.Students.Count; i++)
             {
+                register_subject_cb_student.Items.Add(Data.Students[i].Email);
                 students_names.Rows.Add();
                 students_names.Rows[i].Cells[0].Value = Data.Students[i].Email;
             }
             for (int i = 0; i < Data.Subjects.Count; i++)
             {
+                register_subject_cb_subject.Items.Add(Data.Subjects[i].Name);
                 create_subject_correlative.Items.Add(Data.Subjects[i].Id);
                 to_assign_subject.Items.Add(Data.Subjects[i].Id);
                 subjects_view.Rows.Add();
@@ -50,6 +52,7 @@ namespace Login
             {
                 to_assign_professor.Items.Add(Data.Professors[i].Email);
             }
+
 
         }
 
@@ -95,7 +98,7 @@ namespace Login
             string? email = students_names.Rows[index].Cells[0].Value.ToString();
 
 
-            Student student = Data.FindStudentByEmail(email);
+            Student? student = Data.FindStudentByEmail(email);
             if (student is not null)
             {
                 for (int i = 0; i < student.SubjectsInCourse.Count; i++)
@@ -127,25 +130,27 @@ namespace Login
             string? subject = student_subjects.Rows[index].Cells[1].Value.ToString();
 
 
-            Student student = Data.FindStudentByEmail(email);
+            Student? student = Data.FindStudentByEmail(email);
             if (student is not null)
             {
-                SubjectInCourse subjectInCourse = Data.FindSubjectByName(student, subject);
-                if (MessageBox.Show("Desea cambiar el estado de la materia?", "Estado de materias", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+                SubjectInCourse? subjectInCourse = Data.FindSubjectByName(student, subject);
+                if (subjectInCourse is not null)
                 {
-                    if (subjectInCourse.Status == 1)
+                    if (MessageBox.Show("Desea cambiar el estado de la materia?", "Estado de materias", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
                     {
-                        student_subjects.Rows[index].Cells[2].Value = "Libre";
-                        subjectInCourse.Status = 0;
+                        if (subjectInCourse.Status == 1)
+                        {
+                            student_subjects.Rows[index].Cells[2].Value = "Libre";
+                            subjectInCourse.Status = 0;
+                        }
+                        else
+                        {
+                            student_subjects.Rows[index].Cells[2].Value = "Regular";
+                            subjectInCourse.Status = 1;
+                        }
+                        MessageBox.Show("El estado ha sido cambiado");
                     }
-                    else
-                    {
-                        student_subjects.Rows[index].Cells[2].Value = "Regular";
-                        subjectInCourse.Status = 1;
-                    }
-                    MessageBox.Show("El estado ha sido cambiado");
                 }
-
             }
 
         }
@@ -155,14 +160,6 @@ namespace Login
             student_subjects.Hide();
             students_names.Show();
             subject_back.Hide();
-        }
-
-        private void crearUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void cambiarEstadoDeMateriasToolStripMenuItem_Click(object sender, EventArgs e)
-        {
         }
 
         private void create_subject_button_Click(object sender, EventArgs e)
@@ -198,28 +195,61 @@ namespace Login
         {
             string? emailAux = to_assign_professor.SelectedItem.ToString();
             string? subjectIdAux = to_assign_subject.SelectedItem.ToString();
-            if(emailAux is not null && subjectIdAux is not null)
+            if (emailAux is not null && subjectIdAux is not null)
             {
                 string email = emailAux;
                 short subjectId = short.Parse(subjectIdAux);
                 Professor? professor = Data.FindProfessorByEmail(email);
-                if(professor is not null)
+                if (professor is not null)
                 {
                     bool r = Data.AssignProfessorToSubject(subjectId, professor);
                     if (r)
                     {
                         MessageBox.Show("Profesor asignado a materia con exito");
-                    } else
+                    }
+                    else
                     {
                         MessageBox.Show("Ha habido un error");
                     }
                 }
-                
+
             }
-           
-           
         }
 
+        private void register_subject_button_Click(object sender, EventArgs e)
+        {
+            string? emailAux = register_subject_cb_student.SelectedItem.ToString();
+            string? subjectAux = register_subject_cb_subject.SelectedItem.ToString();
+            if(emailAux is not null && subjectAux is not null)
+            {
+                string email = emailAux;
+                string subject = subjectAux;
+                bool isRegistered = Data.CheckIfSubjectContainsStudent(subject, email);
+                if (!isRegistered)
+                {
+                    Student? studentAux = Data.FindStudentByEmail(email);
+                    if(studentAux is not null)
+                    {
+                        Student student = studentAux;
+                        bool areLessThanTwoSubjects = Data.CorrectNumberOfSubjects(2, student);
+                        if (areLessThanTwoSubjects)
+                        {
+                            SubjectInCourse subjectInCourse = new(1, subject, student);
+                            Data.SubjectsInCourses.Add(subjectInCourse);
+                            MessageBox.Show("Inscripción realizada con exito!");
+                            RefreshForm();
+                        } else
+                        {
+                            MessageBox.Show("El alumno alcanzó el tope de materias para inscribirse.");
+                        }
+                        
+                    }
+                } else
+                {
+                    MessageBox.Show("Ese usuario ya está inscripto en la materia!");
+                }
+            }
+        }
 
         private void RefreshForm()
         {
