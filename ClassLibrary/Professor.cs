@@ -21,7 +21,7 @@ namespace ClassLibrary
         #endregion
 
         #region Props
-        public short ProfessorId { get { return _professorId; } }
+        public short Id { get { return _professorId; } }
         #endregion
 
         #region Methods

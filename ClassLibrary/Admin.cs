@@ -31,25 +31,25 @@ namespace ClassLibrary
         #endregion
 
         #region Methods
-        public bool RegisterUser(List<User> usersList, short id, string email, string password, string typeOfUser)
+        public bool RegisterUser(List<Admin> adminList, List<Student> studentList, List<Professor> professorList, short id, string email, string password, string typeOfUser)
         {
             bool r = false;
 
-            if(usersList.Count > 0 && id > 0 && email != "" && password != "")
+            if (adminList is not null && studentList is not null && professorList is not null && id > 0 && email != "" && password != "")
             {
                 switch (typeOfUser)
                 {
                     case "Admin":
                         Admin admin = new(id, email, password);
-                        usersList.Add(admin);
+                        adminList.Add(admin);
                         break;
                     case "Student":
                         Student student = new(id, email, password);
-                        usersList.Add(student);
+                        studentList.Add(student);
                         break;
                     case "Professor":
                         Professor professor = new(id, email, password);
-                        usersList.Add(professor);
+                        professorList.Add(professor);
                         break;
                 }
                 r = true;
@@ -58,12 +58,24 @@ namespace ClassLibrary
             return r;
         }
 
+        public bool RegisterSubject(List<Subject> subjectList, short id, string name, short period, short correlativeId)
+        {
+            bool r = false;
+            if(subjectList is not null && id > 0 && name != "" && period > 0 && correlativeId > 0)
+            {
+                Subject newSubject = new(id, name, period, correlativeId);
+                subjectList.Add(newSubject);
+                r = true;
+            }
+            return r;
+        }
+
         public short GetNewAdminId(List<Admin> adminList)
         {
             short max = 0;
             foreach (Admin admin in adminList)
             {
-               if(admin.AdminId > max)
+                if (admin.AdminId > max)
                     max = admin.AdminId;
             }
 
@@ -87,8 +99,20 @@ namespace ClassLibrary
             short max = 0;
             foreach (Professor professor in professorList)
             {
-                if (professor.ProfessorId > max)
-                    max = professor.ProfessorId;
+                if (professor.Id > max)
+                    max = professor.Id;
+            }
+
+            return max += 1;
+        }
+
+        public short GetNewSubjectId(List<Subject> subjectList)
+        {
+            short max = 0;
+            foreach (Subject subject in subjectList)
+            {
+                if (subject.Id > max)
+                    max = subject.Id;
             }
 
             return max += 1;

@@ -1,0 +1,11 @@
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\UsersForms.csproj.AssemblyReference.cache
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Form1.resources
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Form2.resources
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Form3.resources
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Form4.resources
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\UsersForms.Properties.Resources.resources
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\UsersForms.csproj.GenerateResource.cache
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\UsersForms.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\UsersForms.AssemblyInfoInputs.cache
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\UsersForms.AssemblyInfo.cs
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\UsersForms.csproj.CoreCompileInputs.cache

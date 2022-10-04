@@ -25,6 +25,16 @@ namespace ClassLibrary
             _correlativeId = correlativeId;
         }
 
+        public Subject(short id, string name, short period, short correlativeId)
+        {
+            _id = id;
+            _name = name;
+            _period = period;
+            _correlativeId = correlativeId;
+            _professors = new List<Professor>();
+            _students = new List<Student>();
+        }
+
         public short Id { get { return _id; } }
 
         public string Name { get { return _name; } }

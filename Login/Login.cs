@@ -36,7 +36,7 @@ namespace Login
                 switch (userType.Name)
                 {
                     case "Admin":
-                        Form2 fa = new((Admin)loggedUser);
+                        Admin fa = new((ClassLibrary.Admin)loggedUser);
                         fa.Show();
                         break;
                     case "Student":
