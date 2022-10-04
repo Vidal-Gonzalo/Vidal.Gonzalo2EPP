@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary
 {
-    public enum SubjectStatus
-    {
-        Free,
-        Regular
-    }
+
 
     public class Student : User
     {
@@ -41,5 +37,6 @@ namespace ClassLibrary
         public List<Subject> Subjects { get { return _subjects; } }
 
         public List<SubjectInCourse> SubjectsInCourse { get { return _subjectsInCourse; } set { _subjectsInCourse = value; } }
+
     }
 }

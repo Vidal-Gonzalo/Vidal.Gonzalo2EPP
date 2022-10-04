@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassLibrary;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,23 +11,22 @@ using System.Windows.Forms;
 
 namespace Login
 {
-    public partial class Form4 : Form
+    public partial class StudentForm : Form
     {
-        private string _type;
-        public Form4(string type)
+        Student loggedStudent = new(); 
+        public StudentForm(Student student)
         {
             InitializeComponent();
-            _type = type;
+            loggedStudent = student;
         }
 
-        private void Form4_Load(object sender, EventArgs e)
+        private void Form3_Load(object sender, EventArgs e)
         {
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"Hola {_type}");
             Application.Exit();
         }
     }

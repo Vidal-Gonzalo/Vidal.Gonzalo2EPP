@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace Login
 {
-    public partial class Form1 : Form
+    public partial class Login : Form
     {
-        public Form1()
+        public Login()
         {
             InitializeComponent();
         }
@@ -27,34 +27,39 @@ namespace Login
 
         private void login_btn_Click(object sender, EventArgs e)
         {
-            User loggedUser = Data.CheckLogin(login_email.Text, login_password.Text);
-
-            if (loggedUser is not null)
+            User? userAux = Data.CheckLogin(login_email.Text, login_password.Text);
+            if (userAux is not null)
             {
-                Type userType = loggedUser.GetType();
-                Hide();
-                switch (userType.Name)
+                User loggedUser = userAux;
+                if (loggedUser is not null)
                 {
-                    case "Admin":
-                        Admin fa = new((ClassLibrary.Admin)loggedUser);
-                        fa.Show();
-                        break;
-                    case "Student":
-                        Form3 fs = new("Student");
-                        fs.Show();
-                        break;
-                    case "Professor":
-                        Form4 fp = new("Professor");
-                        fp.Show();
-                        break;
-                    default:
-                        break;
+                    Type userType = loggedUser.GetType();
+                    Hide();
+                    switch (userType.Name)
+                    {
+                        case "Admin":
+                            AdminForm fa = new((Admin)loggedUser);
+                            fa.Show();
+                            break;
+                        case "Student":
+                            StudentForm fs = new((Student)loggedUser);
+                            fs.Show();
+                            break;
+                        case "Professor":
+                            ProfessorForm fp = new((Professor)loggedUser);
+                            fp.Show();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Usuario y/o contraseña incorrectos");
                 }
             }
-            else
-            {
-                MessageBox.Show("Usuario y/o contraseña incorrectos");
-            }
+
+
         }
 
         private void login_admin_Click(object sender, EventArgs e)

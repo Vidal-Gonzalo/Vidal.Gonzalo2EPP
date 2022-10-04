@@ -13,6 +13,11 @@ namespace ClassLibrary
         #endregion
 
         #region Builders
+        public Professor()
+        {
+            _professorId = 0;
+
+        }
         public Professor(short professorId, string email, string password) : base(email, password)
         {
             _professorId = professorId;

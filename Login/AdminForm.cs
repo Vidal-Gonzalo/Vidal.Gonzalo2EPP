@@ -12,11 +12,11 @@ using System.Windows.Forms;
 
 namespace Login
 {
-    public partial class Admin : Form
+    public partial class AdminForm : Form
     {
-        ClassLibrary.Admin loggedAdmin = new();
+        Admin loggedAdmin = new();
 
-        public Admin(ClassLibrary.Admin admin)
+        public AdminForm(Admin admin)
         {
             InitializeComponent();
             loggedAdmin = admin;
@@ -24,20 +24,11 @@ namespace Login
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form1 fa = new Form1();
+            Login fa = new Login();
             this.Hide();
             fa.Show();
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void createSubject_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void Form2_Load(object sender, EventArgs e)
         {
@@ -233,7 +224,7 @@ namespace Login
         private void RefreshForm()
         {
             Hide();
-            Admin newForm = new(loggedAdmin);
+            AdminForm newForm = new(loggedAdmin);
             newForm.Closed += (s, args) => this.Close();
             newForm.Show();
         }

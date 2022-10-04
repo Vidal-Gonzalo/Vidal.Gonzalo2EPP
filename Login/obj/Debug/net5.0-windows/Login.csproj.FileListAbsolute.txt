@@ -5,7 +5,6 @@ C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Lo
 C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\bin\Debug\net5.0-windows\Login.dll
 C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\bin\Debug\net5.0-windows\Login.pdb
 C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.csproj.AssemblyReference.cache
-C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Form1.resources
 C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Properties.Resources.resources
 C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.csproj.GenerateResource.cache
 C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.GeneratedMSBuildEditorConfig.editorconfig
@@ -20,6 +19,7 @@ C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Lo
 C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\bin\Debug\net5.0-windows\ClassLibrary.dll
 C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\bin\Debug\net5.0-windows\ClassLibrary.pdb
 C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.csproj.CopyComplete
-C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Form3.resources
-C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Form4.resources
-C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Admin.resources
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.Login.resources
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.AdminForm.resources
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.StudentForm.resources
+C:\Users\gonza\Desktop\Desarrollo\UTN\C#-Ejercicios\Vidal.Gonzalo2EPP\Parcial\Login\obj\Debug\net5.0-windows\Login.ProfessorForm.resources

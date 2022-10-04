@@ -47,6 +47,42 @@ namespace ClassLibrary
         
         public short CorrelativeId { get { return _correlativeId; } }
 
+        public static bool operator ==(Professor professor, Subject subject)
+        {
+            bool r = false;
+            for(int i = 0; i < subject.Professors.Count; i++)
+            {
+                if (subject.Professors[i].Id == professor.Id)
+                {
+                    r = true;
+                }
+            }
+            return r;
+        }
 
+        public static bool operator !=(Professor professor, Subject subject)
+        {
+            return !(professor == subject);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(obj, null))
+            {
+                return false;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

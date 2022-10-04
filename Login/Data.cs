@@ -11,23 +11,26 @@ namespace Login
     static class Data
     {
         static List<User> _users;
-        static List<ClassLibrary.Admin> _admins;
+        static List<Admin> _admins;
         static List<Professor> _professors;
         static List<Student> _students;
         static List<Subject> _subjects;
         static List<SubjectInCourse> _subjectsInCourse1;
         static List<SubjectInCourse> _subjectsInCourse2;
+        static List<Exam> _exams;
 
         static Data()
         {
             #region Lists
             _users = new List<User>();
-            _admins = new List<ClassLibrary.Admin>();
+            _admins = new List<Admin>();
             _students = new List<Student>();
             _professors = new List<Professor>();
             _subjects = new List<Subject>();
             _subjectsInCourse1 = new List<SubjectInCourse>();
             _subjectsInCourse2 = new List<SubjectInCourse>();
+            _exams = new List<Exam>();
+            
             #endregion
 
             #region Students
@@ -37,10 +40,10 @@ namespace Login
             _students.Add(hardCodedStudent2);
             #endregion
             #region Subjects in course
-            SubjectInCourse subjectInCourse1 = new(1, "Matematica", hardCodedStudent1, 3);
-            SubjectInCourse subjectInCourse2 = new(1, "Física", hardCodedStudent1, 4);
-            SubjectInCourse subjectInCourse3 = new(1, "Programacion", hardCodedStudent2, 3);
-            SubjectInCourse subjectInCourse4 = new(1, "Química", hardCodedStudent2, 4);
+            SubjectInCourse subjectInCourse1 = new(1, "Matematica", hardCodedStudent1, _exams);
+            SubjectInCourse subjectInCourse2 = new(1, "Física", hardCodedStudent1, _exams);
+            SubjectInCourse subjectInCourse3 = new(1, "Programacion", hardCodedStudent2, _exams);
+            SubjectInCourse subjectInCourse4 = new(1, "Química", hardCodedStudent2, _exams);
             _subjectsInCourse1.Add(subjectInCourse1);
             _subjectsInCourse1.Add(subjectInCourse2);
             _subjectsInCourse2.Add(subjectInCourse3);
@@ -57,7 +60,7 @@ namespace Login
             #endregion
 
             #region Admins
-            ClassLibrary.Admin hardCodedAdmin1 = new(1, "admin@gmail.com", "admin123");
+            Admin hardCodedAdmin1 = new(1, "admin@gmail.com", "admin123");
             _admins.Add(hardCodedAdmin1);
             #endregion
 
@@ -78,13 +81,15 @@ namespace Login
         }
         public static List<User> Users { get { return _users; } set { _users = value; } }
 
-        public static List<ClassLibrary.Admin> Admins { get { return _admins; } }
+        public static List<Admin> Admins { get { return _admins; } }
 
         public static List<Student> Students { get { return _students; } }
 
         public static List<Professor> Professors { get { return _professors; } }
 
         public static List<Subject> Subjects { get { return _subjects; } }
+
+        public static List<SubjectInCourse> SubjectsInCourses { get { return _subjectsInCourse1; } }
 
         public static User? CheckLogin(string email, string password)
         {
@@ -175,6 +180,22 @@ namespace Login
             }
             return r;
         }
+
+        public static SubjectInCourse? FindSubjectInCourseByName(string name)
+        {
+            if(name != "")
+            {
+                foreach(SubjectInCourse item in Data.SubjectsInCourses)
+                {
+                    if(item.Name == name)
+                    {
+                        return item;
+                    }
+                }
+            }
+            return null;
+        }
+
     }
 }
 

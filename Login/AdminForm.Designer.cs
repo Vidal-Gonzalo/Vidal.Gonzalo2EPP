@@ -1,6 +1,6 @@
 ﻿namespace Login
 {
-    partial class Admin
+    partial class AdminForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Admin));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminForm));
             this.button1 = new System.Windows.Forms.Button();
             this.title_admin = new System.Windows.Forms.Label();
             this.createUser_button = new System.Windows.Forms.Button();
