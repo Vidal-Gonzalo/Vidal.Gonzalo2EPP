@@ -32,6 +32,7 @@ namespace Login
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            Data.GetUsers();
             this.title_admin.Text = $"Hola {loggedAdmin.Email}!";
             for (int i = 0; i < Data.Students.Count; i++)
             {
@@ -39,15 +40,15 @@ namespace Login
                 students_names.Rows.Add();
                 students_names.Rows[i].Cells[0].Value = Data.Students[i].Email;
             }
-            for (int i = 0; i < Data.Subjects.Count; i++)
-            {
-                register_subject_cb_subject.Items.Add(Data.Subjects[i].Name);
-                create_subject_correlative.Items.Add(Data.Subjects[i].Id);
-                to_assign_subject.Items.Add(Data.Subjects[i].Id);
-                subjects_view.Rows.Add();
-                subjects_view.Rows[i].Cells[0].Value = Data.Subjects[i].Id;
-                subjects_view.Rows[i].Cells[1].Value = Data.Subjects[i].Name;
-            }
+            //for (int i = 0; i < Data.Subjects.Count; i++)
+            //{
+            //    register_subject_cb_subject.Items.Add(Data.Subjects[i].Name);
+            //    create_subject_correlative.Items.Add(Data.Subjects[i].Id);
+            //    to_assign_subject.Items.Add(Data.Subjects[i].Id);
+            //    subjects_view.Rows.Add();
+            //    subjects_view.Rows[i].Cells[0].Value = Data.Subjects[i].Id;
+            //    subjects_view.Rows[i].Cells[1].Value = Data.Subjects[i].Name;
+            //}
             for (int i = 0; i < Data.Professors.Count; i++)
             {
                 to_assign_professor.Items.Add(Data.Professors[i].Email);
@@ -59,26 +60,22 @@ namespace Login
         private void createUser_button_Click(object sender, EventArgs e)
         {
             //Refactorizar
-            short newId = 0;
-            string type = "";
+            int type = 0;
 
             if (createUser_radioAdmin.Checked)
             {
-                newId = loggedAdmin.GetNewAdminId(Data.Admins);
-                type = "Admin";
+                type = 1;
             }
             else if (createUser_radioStudent.Checked)
             {
-                newId = loggedAdmin.GetNewStudentId(Data.Students);
-                type = "Student";
+                type = 3;
             }
             else if (createUser_radioProfessor.Checked)
             {
-                newId = loggedAdmin.GetNewProfessorId(Data.Professors);
-                type = "Professor";
+                type = 2;
             }
 
-            bool registered = loggedAdmin.RegisterUser(Data.Admins, Data.Students, Data.Professors, newId, createUser_email.Text, createUser_password.Text, type);
+            bool registered = Data.RegisterUser(createUser_email.Text, createUser_password.Text, type);
             if (registered)
             {
                 MessageBox.Show("Usuario registrado");

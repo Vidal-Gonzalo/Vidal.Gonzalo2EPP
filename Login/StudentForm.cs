@@ -25,6 +25,8 @@ namespace Login
         {
             student_greeting.Text = $"Hola {loggedStudent.Email}!";
 
+            Data.AssignSubjectsToUsers();
+
             for (int i = 0; i < Data.Subjects.Count; i++)
             {
                 register_subject_cb.Items.Add(Data.Subjects[i].Name);
@@ -62,23 +64,30 @@ namespace Login
 
         private void register_subject_button_Click(object sender, EventArgs e)
         {
-            string? subjectAux = register_subject_cb.SelectedItem.ToString();
-            if (subjectAux is not null)
+            try
             {
-                string subject = subjectAux;
-                bool isRegistered = Data.CheckIfSubjectContainsStudent(subject, loggedStudent.Email);
-                if (!isRegistered)
+                string? subjectAux = register_subject_cb.SelectedItem.ToString();
+                if (subjectAux is not null)
                 {
-                    SubjectInCourse subjectInCourse = new(1, subject, loggedStudent);
-                    Data.SubjectsInCourses.Add(subjectInCourse);
-                    MessageBox.Show("Inscripción realizada con exito!");
-                    RefreshForm();
-                }
-                else
-                {
-                    MessageBox.Show("Ya éstás inscripto en esa materia!");
+                    string subject = subjectAux;
+                    bool isRegistered = Data.CheckIfSubjectContainsStudent(subject, loggedStudent.Email);
+                    if (!isRegistered)
+                    {
+                        Data.EnrollSubjectToUser(loggedStudent.Id, subject);
+                        MessageBox.Show("Inscripción realizada con exito!");
+                        RefreshForm();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Ya éstás inscripto en esa materia!");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void RefreshForm()

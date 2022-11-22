@@ -9,24 +9,24 @@ namespace ClassLibrary
     public class Professor : User
     {
         #region Fields
-        private short _professorId;
         #endregion
 
         #region Builders
         public Professor()
         {
-            _professorId = 0;
-
+            _id = 0;
+            _email = "";
+            _password = "";
+            _role = 0;
         }
-        public Professor(short professorId, string email, string password) : base(email, password)
+        public Professor(int id, string email, string password, int role) : base(id, email, password, role)
         {
-            _professorId = professorId;
         }
 
         #endregion
 
         #region Props
-        public short Id { get { return _professorId; } }
+        public new int Id { get { return _id; } }
         #endregion
 
         #region Methods

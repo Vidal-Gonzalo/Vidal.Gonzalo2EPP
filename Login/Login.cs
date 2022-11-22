@@ -23,6 +23,7 @@ namespace Login
         {
             this.MinimumSize = new Size(this.Width, this.Height);
             this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            Data.GetSubjects();
         }
 
         private void login_btn_Click(object sender, EventArgs e)
@@ -31,25 +32,28 @@ namespace Login
             if (userAux is not null)
             {
                 User loggedUser = userAux;
-                Type userType = loggedUser.GetType();
-                Hide();
-                switch (userType.Name)
+                switch (loggedUser.Role)
                 {
-                    case "Admin":
-                        AdminForm fa = new((Admin)loggedUser);
+                    case 1:
+                        Admin admin = new Admin(loggedUser.Id, loggedUser.Email, loggedUser.Password, loggedUser.Role);
+                        AdminForm fa = new(admin);
                         fa.Show();
                         break;
-                    case "Student":
-                        StudentForm fs = new((Student)loggedUser);
-                        fs.Show();
-                        break;
-                    case "Professor":
-                        ProfessorForm fp = new((Professor)loggedUser);
+                    case 2:
+                        Professor professor = new Professor(loggedUser.Id, loggedUser.Email, loggedUser.Password, loggedUser.Role);
+                        ProfessorForm fp = new(professor);
                         fp.Show();
                         break;
+                    case 3:
+                        Student student = new Student(loggedUser.Id, loggedUser.Email, loggedUser.Password, loggedUser.Role);
+                        StudentForm fs = new(student);
+                        fs.Show();
+                        break;
                     default:
+                        MessageBox.Show("Hubo un error.");
                         break;
                 }
+                this.Hide();
             }
             else
             {

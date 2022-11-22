@@ -10,29 +10,25 @@ namespace ClassLibrary
 
     public class Student : User
     {
-        private short _studentId;
         private List<Subject> _subjects;
         private List<SubjectInCourse> _subjectsInCourse;
 
         public Student()
         {
-            _studentId = 0;
             _subjects = new List<Subject>();
             _subjectsInCourse = new List<SubjectInCourse>();
         }
-        public Student(short studentId, string email, string password) : base(email, password)
+        public Student(int id, string email, string password, int role) : base(id, email, password, role)
         {
-            _studentId = studentId;
             _subjects = new List<Subject>();
             _subjectsInCourse = new List<SubjectInCourse>();
         }
-        public Student(short studentId,List<Subject> subjects, string email, string password) : base(email, password)
+        public Student(short id, List<Subject> subjects, string email, string password, int role) : base(id, email, password, role)
         {
-            _studentId = studentId;
             _subjects = subjects;
         }
 
-        public short StudentId { get { return _studentId; } }
+        public int StudentId { get { return _id; } }
         
         public List<Subject> Subjects { get { return _subjects; } }
 

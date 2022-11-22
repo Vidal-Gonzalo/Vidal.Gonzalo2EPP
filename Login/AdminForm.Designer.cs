@@ -77,6 +77,9 @@
             this.label13 = new System.Windows.Forms.Label();
             this.register_subject_cb_student = new System.Windows.Forms.ComboBox();
             this.register_subject_button = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.students_names)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.student_subjects)).BeginInit();
             this.user_register_section.SuspendLayout();
@@ -503,7 +506,7 @@
             // register_subject_title
             // 
             this.register_subject_title.AutoSize = true;
-            this.register_subject_title.Location = new System.Drawing.Point(382, 567);
+            this.register_subject_title.Location = new System.Drawing.Point(144, 579);
             this.register_subject_title.Name = "register_subject_title";
             this.register_subject_title.Size = new System.Drawing.Size(145, 15);
             this.register_subject_title.TabIndex = 19;
@@ -512,7 +515,7 @@
             // register_subject_cb_subject
             // 
             this.register_subject_cb_subject.FormattingEnabled = true;
-            this.register_subject_cb_subject.Location = new System.Drawing.Point(382, 611);
+            this.register_subject_cb_subject.Location = new System.Drawing.Point(144, 623);
             this.register_subject_cb_subject.Name = "register_subject_cb_subject";
             this.register_subject_cb_subject.Size = new System.Drawing.Size(145, 23);
             this.register_subject_cb_subject.TabIndex = 20;
@@ -520,7 +523,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(382, 593);
+            this.label12.Location = new System.Drawing.Point(144, 605);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(47, 15);
             this.label12.TabIndex = 21;
@@ -529,7 +532,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(382, 637);
+            this.label13.Location = new System.Drawing.Point(144, 649);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(50, 15);
             this.label13.TabIndex = 22;
@@ -538,14 +541,14 @@
             // register_subject_cb_student
             // 
             this.register_subject_cb_student.FormattingEnabled = true;
-            this.register_subject_cb_student.Location = new System.Drawing.Point(382, 655);
+            this.register_subject_cb_student.Location = new System.Drawing.Point(144, 667);
             this.register_subject_cb_student.Name = "register_subject_cb_student";
             this.register_subject_cb_student.Size = new System.Drawing.Size(145, 23);
             this.register_subject_cb_student.TabIndex = 23;
             // 
             // register_subject_button
             // 
-            this.register_subject_button.Location = new System.Drawing.Point(566, 629);
+            this.register_subject_button.Location = new System.Drawing.Point(328, 641);
             this.register_subject_button.Name = "register_subject_button";
             this.register_subject_button.Size = new System.Drawing.Size(75, 23);
             this.register_subject_button.TabIndex = 24;
@@ -553,11 +556,40 @@
             this.register_subject_button.UseVisualStyleBackColor = true;
             this.register_subject_button.Click += new System.EventHandler(this.register_subject_button_Click);
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(582, 579);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(159, 15);
+            this.label14.TabIndex = 25;
+            this.label14.Text = "Exportar alumnos de materia";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(582, 605);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(159, 23);
+            this.comboBox1.TabIndex = 26;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(627, 649);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 27;
+            this.button2.Text = "Exportar";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(865, 749);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.label14);
             this.Controls.Add(this.register_subject_button);
             this.Controls.Add(this.register_subject_cb_student);
             this.Controls.Add(this.label13);
@@ -640,5 +672,8 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ComboBox register_subject_cb_student;
         private System.Windows.Forms.Button register_subject_button;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button2;
     }
 }

@@ -8,14 +8,14 @@ namespace ClassLibrary
 {
     public class Subject
     {
-        private short _id;
+        private int _id;
         private string _name;
-        private short _period;
+        private int _period;
         private List<Professor> _professors;
         private List<Student> _students;
-        private short _correlativeId;
+        private int _correlativeId;
 
-        public Subject(short id, string name, short period, List<Professor> professors, List<Student> students, short correlativeId)
+        public Subject(int id, string name, short period, List<Professor> professors, List<Student> students, short correlativeId)
         {
             _id = id;
             _name = name;
@@ -25,7 +25,7 @@ namespace ClassLibrary
             _correlativeId = correlativeId;
         }
 
-        public Subject(short id, string name, short period, short correlativeId)
+        public Subject(int id, string name, int period, int correlativeId)
         {
             _id = id;
             _name = name;
@@ -35,17 +35,17 @@ namespace ClassLibrary
             _students = new List<Student>();
         }
 
-        public short Id { get { return _id; } }
+        public int Id { get { return _id; } }
 
         public string Name { get { return _name; } }
 
-        public short Period { get { return _period; } }
+        public int Period { get { return _period; } }
 
         public List<Professor> Professors { get { return _professors; } }
     
         public List<Student> Students { get { return _students; } }
         
-        public short CorrelativeId { get { return _correlativeId; } }
+        public int CorrelativeId { get { return _correlativeId; } }
 
         public static bool operator ==(Professor professor, Subject subject)
         {
