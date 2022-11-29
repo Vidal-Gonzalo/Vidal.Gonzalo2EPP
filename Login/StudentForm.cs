@@ -25,22 +25,24 @@ namespace Login
         {
             student_greeting.Text = $"Hola {loggedStudent.Email}!";
 
-            Data.AssignSubjectsToUsers();
-
-            for (int i = 0; i < Data.Subjects.Count; i++)
+            if (register_subject_cb.Items.Count == 0)
             {
-                register_subject_cb.Items.Add(Data.Subjects[i].Name);
+                for (int i = 0; i < Data.Subjects.Count; i++)
+                {
+                    register_subject_cb.Items.Add(Data.Subjects[i].Name);
+                }
             }
 
-            for (int i = 0; i < Data.SubjectsInCourses.Count; i++)
+            List<SubjectInCourse>? subjectsFromStudent = Data.GetSubjectsFromStudent(loggedStudent);
+            if(subjectsFromStudent is not null)
             {
-                if (Data.SubjectsInCourses[i].Student.Email == loggedStudent.Email)
+                for(int i = 0; i < subjectsFromStudent.Count; i++)
                 {
-                    if (Data.SubjectsInCourses.Count >= subjects_list.Rows.Count)
+                    if (subjectsFromStudent.Count >= subjects_list.Rows.Count)
                     {
                         subjects_list.Rows.Add();
-                        subjects_list.Rows[i].Cells[0].Value = Data.SubjectsInCourses[i].Name;
-                        var lista = Data.SubjectsInCourses[i].Exams.Select(x => x.Calification.ToString()).ToList();
+                        subjects_list.Rows[i].Cells[0].Value = subjectsFromStudent[i].Name;
+                        var lista = subjectsFromStudent[i].Exams.Select(x => x.Calification.ToString()).ToList();
                         var finalString = string.Join(",", lista);
                         subjects_list.Rows[i].Cells[1].Value = finalString;
                     }

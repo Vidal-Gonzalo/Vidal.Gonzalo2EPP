@@ -2,11 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Login
 {
@@ -79,14 +75,19 @@ namespace Login
 
             try
             {
+                _sqlCommand.Parameters.Clear();
                 _sqlCommand.CommandText = "SELECT * FROM USUARIOS";
                 _sqlConnection.Open();
                 SqlDataReader reader = _sqlCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    _users.Add(new User(Convert.ToInt32(reader["ID"]), reader["EMAIL"].ToString(), reader["CONTRASEÑA"].ToString(), Convert.ToInt32(reader["ROL"])));
-                    r = true;
+                    User userAux = new User(Convert.ToInt32(reader["ID"]), reader["EMAIL"].ToString(), reader["CONTRASEÑA"].ToString(), Convert.ToInt32(reader["ROL"]));
+                    if (userAux is not null && !CheckIfUserExists(userAux.Email))
+                    {
+                        _users.Add(userAux);
+                        r = true;
+                    }
                 }
                 AssignUserRoles();
             }
@@ -107,6 +108,7 @@ namespace Login
 
             try
             {
+                _sqlCommand.Parameters.Clear();
                 _sqlCommand.CommandText = "SELECT * FROM MATERIAS";
                 _sqlConnection.Open();
                 SqlDataReader reader = _sqlCommand.ExecuteReader();
@@ -134,6 +136,7 @@ namespace Login
             User userAux = new();
             try
             {
+                _sqlCommand.Parameters.Clear();
                 _sqlCommand.CommandText = $"SELECT * FROM USUARIOS WHERE EMAIL = '{email}'";
                 _sqlConnection.Open();
                 SqlDataReader reader = _sqlCommand.ExecuteReader();
@@ -143,7 +146,6 @@ namespace Login
                     userAux = new(Convert.ToInt32(reader["ID"]), reader["EMAIL"].ToString(), reader["CONTRASEÑA"].ToString(), Convert.ToInt32(reader["ROL"]));
 
                 }
-                AssignUserRoles();
             }
             catch (Exception ex)
             {
@@ -165,19 +167,28 @@ namespace Login
                 switch (user.Role)
                 {
                     case 1:
-                        Admin admin = new Admin(user.Id, user.Email, user.Password, user.Role);
-                        _admins.Add(admin);
-                        r = true;
+                        if (FindAdminByEmail(user.Email) is null)
+                        {
+                            Admin admin = new Admin(user.Id, user.Email, user.Password, user.Role);
+                            _admins.Add(admin);
+                            r = true;
+                        }
                         break;
                     case 2:
-                        Professor professor = new Professor(user.Id, user.Email, user.Password, user.Role);
-                        _professors.Add(professor);
-                        r = true;
+                        if (FindProfessorByEmail(user.Email) is null)
+                        {
+                            Professor professor = new Professor(user.Id, user.Email, user.Password, user.Role);
+                            _professors.Add(professor);
+                            r = true;
+                        }
                         break;
                     case 3:
-                        Student student = new Student(user.Id, user.Email, user.Password, user.Role);
-                        _students.Add(student);
-                        r = true;
+                        if (FindStudentByEmail(user.Email) is null)
+                        {
+                            Student student = new Student(user.Id, user.Email, user.Password, user.Role);
+                            _students.Add(student);
+                            r = true;
+                        }
                         break;
                     default:
                         break;
@@ -191,13 +202,13 @@ namespace Login
             bool r = false;
             try
             {
+                _sqlCommand.Parameters.Clear();
                 _sqlConnection.Open();
                 _sqlCommand.CommandText = $"INSERT INTO MATERIAS_A_USUARIOS(ID_USUARIO, ESTADO, NOMBRE, EXAMEN) VALUES(@id_usuario, @estado, @nombre, @examen)";
                 _sqlCommand.Parameters.AddWithValue("@id_usuario", idUser);
                 _sqlCommand.Parameters.AddWithValue("@estado", 1);
                 _sqlCommand.Parameters.AddWithValue("@nombre", nameSubject);
                 _sqlCommand.Parameters.AddWithValue("@examen", 0);
-                SqlDataReader reader = _sqlCommand.ExecuteReader();
                 _sqlCommand.ExecuteNonQuery();
 
                 r = true;
@@ -228,10 +239,18 @@ namespace Login
                     Student? studentAux = FindStudentById(Convert.ToInt16(reader["ID_USUARIO"]));
                     if (studentAux is not null)
                     {
-                        Student student = studentAux;
-                        subjectInCourse.Student = student;
+                        if (!CheckIfSubjectExists(subjectInCourse.Name, studentAux.Email))
+                        {
+                            Student student = studentAux;
+                            if (subjectInCourse != student)
+                            {
+                                subjectInCourse.Student = student;
+                                _subjectsInCourse1.Add(subjectInCourse);
+                                MessageBox.Show($"Assigned subject: {subjectInCourse.Name} - {subjectInCourse.Status.ToString()} , student: {student.Email}");
+                            }
+                            r = true;
+                        }
                     }
-                    r = true;
                 }
             }
             catch (Exception ex)
@@ -335,12 +354,28 @@ namespace Login
             return null;
         }
 
+        public static Admin? FindAdminByEmail(string? email)
+        {
+            if (email is not null)
+            {
+                foreach (Admin admin in _admins)
+                {
+                    if (admin.Email == email)
+                    {
+                        return admin;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public static SubjectInCourse? FindSubjectByName(Student? student, string? name)
         {
             SubjectInCourse subjectInCourse = new();
             if (name != "" && student is not null)
             {
-                foreach (SubjectInCourse subject in student.SubjectsInCourse)
+                foreach (SubjectInCourse subject in _subjectsInCourse1)
                 {
                     if (subject.Name == name)
                     {
@@ -414,6 +449,46 @@ namespace Login
                 }
             }
             return r;
+        }
+
+        private static bool CheckIfUserExists(string userEmail)
+        {
+            bool r = false;
+            foreach (User item in _users)
+            {
+                if (item.Email == userEmail)
+                    r = true;
+            }
+            return r;
+        }
+
+        public static bool CheckIfSubjectExists(string subjectName, string studentEmail)
+        {
+            bool r = false;
+            foreach (SubjectInCourse item in _subjectsInCourse1)
+            {
+                if (item.Name == subjectName && item.Student.Email == studentEmail)
+                    r = true;
+            }
+            return r;
+        }
+
+        public static List<SubjectInCourse>? GetSubjectsFromStudent(Student student)
+        {
+            List<SubjectInCourse> subjectsFromStudent = new List<SubjectInCourse>();
+            foreach (SubjectInCourse item in _subjectsInCourse1)
+            {
+                if (item.StudentEmail == student.Email)
+                    subjectsFromStudent.Add(item);
+            }
+            if (subjectsFromStudent.Count > 0)
+            {
+                return subjectsFromStudent;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static bool CorrectNumberOfSubjects(int max, Student student)

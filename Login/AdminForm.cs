@@ -32,23 +32,23 @@ namespace Login
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            Data.GetUsers();
             this.title_admin.Text = $"Hola {loggedAdmin.Email}!";
+
             for (int i = 0; i < Data.Students.Count; i++)
             {
                 register_subject_cb_student.Items.Add(Data.Students[i].Email);
                 students_names.Rows.Add();
                 students_names.Rows[i].Cells[0].Value = Data.Students[i].Email;
             }
-            //for (int i = 0; i < Data.Subjects.Count; i++)
-            //{
-            //    register_subject_cb_subject.Items.Add(Data.Subjects[i].Name);
-            //    create_subject_correlative.Items.Add(Data.Subjects[i].Id);
-            //    to_assign_subject.Items.Add(Data.Subjects[i].Id);
-            //    subjects_view.Rows.Add();
-            //    subjects_view.Rows[i].Cells[0].Value = Data.Subjects[i].Id;
-            //    subjects_view.Rows[i].Cells[1].Value = Data.Subjects[i].Name;
-            //}
+            for (int i = 0; i < Data.Subjects.Count; i++)
+            {
+                register_subject_cb_subject.Items.Add(Data.Subjects[i].Name);
+                create_subject_correlative.Items.Add(Data.Subjects[i].Id);
+                to_assign_subject.Items.Add(Data.Subjects[i].Id);
+                subjects_view.Rows.Add();
+                subjects_view.Rows[i].Cells[0].Value = Data.Subjects[i].Id;
+                subjects_view.Rows[i].Cells[1].Value = Data.Subjects[i].Name;
+            }
             for (int i = 0; i < Data.Professors.Count; i++)
             {
                 to_assign_professor.Items.Add(Data.Professors[i].Email);
@@ -79,6 +79,7 @@ namespace Login
             if (registered)
             {
                 MessageBox.Show("Usuario registrado");
+                Data.GetUsers();
                 RefreshForm();
             }
             else
@@ -94,27 +95,32 @@ namespace Login
             int index = int.Parse(e.RowIndex.ToString());
             string? email = students_names.Rows[index].Cells[0].Value.ToString();
 
-
             Student? student = Data.FindStudentByEmail(email);
             if (student is not null)
             {
-                for (int i = 0; i < student.SubjectsInCourse.Count; i++)
+                List<SubjectInCourse>? subjectsFromStudent = Data.GetSubjectsFromStudent(student);
+                if (subjectsFromStudent is not null)
                 {
-                    if (student_subjects.Rows.Count <= student.SubjectsInCourse.Count)
+                    for (int i = 0; i < subjectsFromStudent.Count; i++)
                     {
-                        student_subjects.Rows.Add();
-                    }
-                    student_subjects.Rows[i].Cells[0].Value = student.SubjectsInCourse[i].StudentEmail;
-                    student_subjects.Rows[i].Cells[1].Value = student.SubjectsInCourse[i].Name;
-                    if (student.SubjectsInCourse[i].Status == 1)
-                    {
-                        student_subjects.Rows[i].Cells[2].Value = "Regular";
-                    }
-                    else
-                    {
-                        student_subjects.Rows[i].Cells[2].Value = "Libre";
+                        if (student_subjects.Rows.Count <= Data.SubjectsInCourses.Count)
+                        {
+                            student_subjects.Rows.Add();
+                            student_subjects.Rows[i].Cells[0].Value = subjectsFromStudent[i].Student.Email;
+                            student_subjects.Rows[i].Cells[1].Value = subjectsFromStudent[i].Name;
+                            if (subjectsFromStudent[i].Status == 1)
+                            {
+                                student_subjects.Rows[i].Cells[2].Value = "Regular";
+                            }
+                            else
+                            {
+                                student_subjects.Rows[i].Cells[2].Value = "Libre";
+                            }
+                        }
+
                     }
                 }
+
                 student_subjects.Show();
                 subject_back.Visible = true;
             }
@@ -126,6 +132,7 @@ namespace Login
             string? email = student_subjects.Rows[index].Cells[0].Value.ToString();
             string? subject = student_subjects.Rows[index].Cells[1].Value.ToString();
 
+            //Faltaría hacer la consulta SQL para editar el estado de la materia
 
             Student? student = Data.FindStudentByEmail(email);
             if (student is not null)
@@ -135,6 +142,7 @@ namespace Login
                 {
                     if (MessageBox.Show("Desea cambiar el estado de la materia?", "Estado de materias", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
                     {
+                        MessageBox.Show(subjectInCourse.Status.ToString());
                         if (subjectInCourse.Status == 1)
                         {
                             student_subjects.Rows[index].Cells[2].Value = "Libre";
@@ -217,7 +225,7 @@ namespace Login
         {
             string? emailAux = register_subject_cb_student.SelectedItem.ToString();
             string? subjectAux = register_subject_cb_subject.SelectedItem.ToString();
-            if(emailAux is not null && subjectAux is not null)
+            if (emailAux is not null && subjectAux is not null)
             {
                 string email = emailAux;
                 string subject = subjectAux;
@@ -225,7 +233,7 @@ namespace Login
                 if (!isRegistered)
                 {
                     Student? studentAux = Data.FindStudentByEmail(email);
-                    if(studentAux is not null)
+                    if (studentAux is not null)
                     {
                         Student student = studentAux;
                         bool areLessThanTwoSubjects = Data.CorrectNumberOfSubjects(2, student);
@@ -235,13 +243,15 @@ namespace Login
                             Data.SubjectsInCourses.Add(subjectInCourse);
                             MessageBox.Show("Inscripción realizada con exito!");
                             RefreshForm();
-                        } else
+                        }
+                        else
                         {
                             MessageBox.Show("El alumno alcanzó el tope de materias para inscribirse.");
                         }
-                        
+
                     }
-                } else
+                }
+                else
                 {
                     MessageBox.Show("Ese usuario ya está inscripto en la materia!");
                 }

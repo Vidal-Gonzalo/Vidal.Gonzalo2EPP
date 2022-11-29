@@ -111,6 +111,7 @@ namespace Login
                     {
                         if (Data.SubjectsInCourses.Count >= change_calification_grid.Rows.Count)
                         {
+                            //Exception here
                             Student student = Data.SubjectsInCourses[i].Student;
                             change_calification_grid.Rows.Add();
                             change_calification_grid.Rows[i].Cells[0].Value = student.Email;

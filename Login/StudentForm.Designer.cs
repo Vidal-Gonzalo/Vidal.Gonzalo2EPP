@@ -36,9 +36,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.register_subject_button = new System.Windows.Forms.Button();
             this.subjects_list = new System.Windows.Forms.DataGridView();
-            this.label2 = new System.Windows.Forms.Label();
             this.student_subjects_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.student_subject_calification = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.subjects_list)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,15 +100,30 @@
             // 
             // subjects_list
             // 
+            this.subjects_list.AllowUserToDeleteRows = false;
             this.subjects_list.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.subjects_list.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.student_subjects_name,
             this.student_subject_calification});
             this.subjects_list.Location = new System.Drawing.Point(326, 127);
             this.subjects_list.Name = "subjects_list";
+            this.subjects_list.ReadOnly = true;
             this.subjects_list.RowTemplate.Height = 25;
             this.subjects_list.Size = new System.Drawing.Size(344, 150);
             this.subjects_list.TabIndex = 6;
+            // 
+            // student_subjects_name
+            // 
+            this.student_subjects_name.HeaderText = "Nombre";
+            this.student_subjects_name.Name = "student_subjects_name";
+            this.student_subjects_name.ReadOnly = true;
+            // 
+            // student_subject_calification
+            // 
+            this.student_subject_calification.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.student_subject_calification.HeaderText = "Calificaciones";
+            this.student_subject_calification.Name = "student_subject_calification";
+            this.student_subject_calification.ReadOnly = true;
             // 
             // label2
             // 
@@ -118,17 +133,6 @@
             this.label2.Size = new System.Drawing.Size(73, 15);
             this.label2.TabIndex = 7;
             this.label2.Text = "Tus materias";
-            // 
-            // student_subjects_name
-            // 
-            this.student_subjects_name.HeaderText = "Nombre";
-            this.student_subjects_name.Name = "student_subjects_name";
-            // 
-            // student_subject_calification
-            // 
-            this.student_subject_calification.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.student_subject_calification.HeaderText = "Calificaciones";
-            this.student_subject_calification.Name = "student_subject_calification";
             // 
             // StudentForm
             // 

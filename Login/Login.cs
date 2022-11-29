@@ -23,7 +23,18 @@ namespace Login
         {
             this.MinimumSize = new Size(this.Width, this.Height);
             this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            Data.GetSubjects();
+            if (Data.Users.Count == 0)
+            {
+                Data.GetUsers();
+
+            }
+            if (Data.Subjects.Count == 0)
+            {
+                Data.GetSubjects();
+            }
+
+            Data.AssignSubjectsToUsers();
+
         }
 
         private void login_btn_Click(object sender, EventArgs e)

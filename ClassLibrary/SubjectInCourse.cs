@@ -78,6 +78,25 @@ namespace ClassLibrary
             return !(subject == name);
         }
 
+        public static bool operator ==(SubjectInCourse subject, Student student)
+        {
+            bool r = false;
+            if(subject is not null && student is not null)
+            {
+                if(subject.Student == student)
+                {
+                    r = true;
+                }
+            }
+            return r;
+        }
+
+        public static bool operator !=(SubjectInCourse subject, Student student)
+        {
+            return !(subject == student);
+        }
+
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj))
