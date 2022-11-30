@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ClassLibrary
 {
@@ -24,25 +25,37 @@ namespace ClassLibrary
         }
 
         #region Props
-        public new int Id { get { return _id;  } }
+        public new int Id { get { return _id; } }
         #endregion
 
         #region Methods
-        
 
-        public bool RegisterSubject(List<Subject> subjectList, short id, string name, short period, short correlativeId)
+
+        public bool RegisterSubject(Delegate register, List<Subject> subjectList, string name, short period, short correlativeId)
         {
             bool r = false;
-            if (subjectList is not null && id > 0 && name != "" && period > 0 && correlativeId > 0)
+            if (subjectList is not null && name != "" && period > 0 && correlativeId > 0)
             {
-                Subject newSubject = new(id, name, period, correlativeId);
-                subjectList.Add(newSubject);
-                r = true;
+                r = (bool)register.DynamicInvoke(name, period, correlativeId);
+                if (r)
+                    subjectList.Clear();
             }
             return r;
         }
 
-      
+        public bool AssignProfessorToSubject(Delegate assign, List<SubjectInCourse> subjectList, int userId, string subjectName, int status)
+        {
+            bool r = false;
+            if (subjectList is not null && subjectName != "" && userId > 0 && status >= 0 && status <= 1)
+            {
+                r = (bool)assign.DynamicInvoke(userId, subjectName, status);
+                if (r) 
+                    subjectList.Clear(); 
+            }
+            return r;
+        }
+
+
         public short GetNewSubjectId(List<Subject> subjectList)
         {
             int max = 0;
@@ -54,6 +67,40 @@ namespace ClassLibrary
 
             return (short)(max += 1);
         }
+
+        public Student FindStudentByEmail(List<Student> students, string email)
+        {
+            if (students is not null && email is not null)
+            {
+                foreach (Student student in students)
+                {
+                    if (student.Email == email)
+                    {
+                        return student;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public SubjectInCourse FindSubjectByName(List<SubjectInCourse> subjectsInCourse, string name, Student student)
+        {
+            if (name != "" && student is not null)
+            {
+                foreach (SubjectInCourse subject in subjectsInCourse)
+                {
+                    if (subject.Name == name)
+                    {
+                        SubjectInCourse subjectInCourse = new();
+                        subjectInCourse = subject;
+                        return subjectInCourse;
+                    }
+                }
+            }
+            return null;
+        }
+
         #endregion
     }
 }

@@ -95,7 +95,7 @@ namespace Login
             int index = int.Parse(e.RowIndex.ToString());
             string? email = students_names.Rows[index].Cells[0].Value.ToString();
 
-            Student? student = Data.FindStudentByEmail(email);
+            Student? student = loggedAdmin.FindStudentByEmail(Data.Students, email);
             if (student is not null)
             {
                 List<SubjectInCourse>? subjectsFromStudent = Data.GetSubjectsFromStudent(student);
@@ -106,7 +106,7 @@ namespace Login
                         if (student_subjects.Rows.Count <= Data.SubjectsInCourses.Count)
                         {
                             student_subjects.Rows.Add();
-                            student_subjects.Rows[i].Cells[0].Value = subjectsFromStudent[i].Student.Email;
+                            student_subjects.Rows[i].Cells[0].Value = student.Email;
                             student_subjects.Rows[i].Cells[1].Value = subjectsFromStudent[i].Name;
                             if (subjectsFromStudent[i].Status == 1)
                             {
@@ -131,29 +131,37 @@ namespace Login
             int index = int.Parse(e.RowIndex.ToString());
             string? email = student_subjects.Rows[index].Cells[0].Value.ToString();
             string? subject = student_subjects.Rows[index].Cells[1].Value.ToString();
+            bool r;
 
-            //Faltaría hacer la consulta SQL para editar el estado de la materia
-
-            Student? student = Data.FindStudentByEmail(email);
+            Student? student = loggedAdmin.FindStudentByEmail(Data.Students, email);
             if (student is not null)
             {
-                SubjectInCourse? subjectInCourse = Data.FindSubjectByName(student, subject);
+                SubjectInCourse? subjectInCourse = loggedAdmin.FindSubjectByName(Data.SubjectsInCourses, subject, student);
                 if (subjectInCourse is not null)
                 {
                     if (MessageBox.Show("Desea cambiar el estado de la materia?", "Estado de materias", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
                     {
-                        MessageBox.Show(subjectInCourse.Status.ToString());
                         if (subjectInCourse.Status == 1)
                         {
                             student_subjects.Rows[index].Cells[2].Value = "Libre";
                             subjectInCourse.Status = 0;
+                            r = Data.ChangeSubjectStatus(student.Id, subjectInCourse.Name, 0);
                         }
                         else
                         {
                             student_subjects.Rows[index].Cells[2].Value = "Regular";
                             subjectInCourse.Status = 1;
+                            r = Data.ChangeSubjectStatus(student.Id, subjectInCourse.Name, 1);
                         }
-                        MessageBox.Show("El estado ha sido cambiado");
+                        if (r)
+                        {
+                            MessageBox.Show("El estado ha sido cambiado");
+                            RefreshForm();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ha habido un error.");
+                        }
                     }
                 }
             }
@@ -162,6 +170,7 @@ namespace Login
 
         private void subject_back_Click(object sender, EventArgs e)
         {
+            student_subjects.Rows.Clear();
             student_subjects.Hide();
             students_names.Show();
             subject_back.Hide();
@@ -183,10 +192,12 @@ namespace Login
             if (subjectAux is not null)
             {
                 short newCorrelativeSubject = short.Parse(subjectAux);
-                bool registered = loggedAdmin.RegisterSubject(Data.Subjects, newId, name, subjectQuarter, newCorrelativeSubject);
+                RegisterCallback registerFunction = new RegisterCallback(Data.RegisterSubject);
+                bool registered = loggedAdmin.RegisterSubject(registerFunction, Data.Subjects, name, subjectQuarter, newCorrelativeSubject);
                 if (registered)
                 {
                     MessageBox.Show("Materia registrada con exito");
+                    Data.GetSubjects();
                     RefreshForm();
                 }
             }
@@ -207,15 +218,21 @@ namespace Login
                 Professor? professor = Data.FindProfessorByEmail(email);
                 if (professor is not null)
                 {
-                    bool r = Data.AssignProfessorToSubject(subjectId, professor);
-                    if (r)
+                    AssignCallback assignFunction = new AssignCallback(Data.AssignProfessorToSubject);
+                    Subject? subject = Data.FindSubjectById(subjectId);
+                    if(subject is not null)
                     {
-                        MessageBox.Show("Profesor asignado a materia con exito");
+                        bool r = loggedAdmin.AssignProfessorToSubject(assignFunction, Data.SubjectsInCourses, professor.Id, subject.Name, 1);
+                        if (r)
+                        {
+                            MessageBox.Show("Profesor asignado a materia con exito");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ha habido un error");
+                        }
                     }
-                    else
-                    {
-                        MessageBox.Show("Ha habido un error");
-                    }
+                   
                 }
 
             }
@@ -232,7 +249,7 @@ namespace Login
                 bool isRegistered = Data.CheckIfSubjectContainsStudent(subject, email);
                 if (!isRegistered)
                 {
-                    Student? studentAux = Data.FindStudentByEmail(email);
+                    Student? studentAux = loggedAdmin.FindStudentByEmail(Data.Students, email);
                     if (studentAux is not null)
                     {
                         Student student = studentAux;
@@ -257,6 +274,10 @@ namespace Login
                 }
             }
         }
+
+        private delegate bool RegisterCallback(string name, short period, short correlativeId);
+
+        private delegate bool AssignCallback(int userId, string subjectName, int status);
 
         private void RefreshForm()
         {

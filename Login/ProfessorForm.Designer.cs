@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProfessorForm));
             this.label1 = new System.Windows.Forms.Label();
             this.assigned_subjects_grid = new System.Windows.Forms.DataGridView();
-            this.assigned_subject_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.assigned_subject_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.professor_form_greeting = new System.Windows.Forms.Label();
             this.create_exam_datePicker = new System.Windows.Forms.DateTimePicker();
@@ -84,7 +83,6 @@
             // 
             this.assigned_subjects_grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.assigned_subjects_grid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.assigned_subject_id,
             this.assigned_subject_name});
             this.assigned_subjects_grid.Location = new System.Drawing.Point(50, 151);
             this.assigned_subjects_grid.Name = "assigned_subjects_grid";
@@ -92,11 +90,6 @@
             this.assigned_subjects_grid.Size = new System.Drawing.Size(366, 186);
             this.assigned_subjects_grid.TabIndex = 1;
             this.assigned_subjects_grid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.assigned_subjects_grid_CellContentClick);
-            // 
-            // assigned_subject_id
-            // 
-            this.assigned_subject_id.HeaderText = "ID";
-            this.assigned_subject_id.Name = "assigned_subject_id";
             // 
             // assigned_subject_name
             // 
@@ -129,7 +122,7 @@
             this.create_exam_grid.Controls.Add(this.label3);
             this.create_exam_grid.Controls.Add(this.label2);
             this.create_exam_grid.Controls.Add(this.create_exam_datePicker);
-            this.create_exam_grid.Location = new System.Drawing.Point(50, 134);
+            this.create_exam_grid.Location = new System.Drawing.Point(50, 151);
             this.create_exam_grid.Name = "create_exam_grid";
             this.create_exam_grid.Size = new System.Drawing.Size(366, 192);
             this.create_exam_grid.TabIndex = 4;
@@ -433,8 +426,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label professor_form_greeting;
         private System.Windows.Forms.DataGridView assigned_subjects_grid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn assigned_subject_id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn assigned_subject_name;
         private System.Windows.Forms.DateTimePicker create_exam_datePicker;
         private System.Windows.Forms.GroupBox create_exam_grid;
         private System.Windows.Forms.Button create_exam_button;
@@ -464,5 +455,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn student_exams;
         private System.Windows.Forms.DataGridViewTextBoxColumn student_califications;
         private System.Windows.Forms.Button professor_form_exit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn assigned_subject_name;
     }
 }

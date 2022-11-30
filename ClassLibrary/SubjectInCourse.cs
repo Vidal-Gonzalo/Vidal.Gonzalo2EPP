@@ -12,7 +12,8 @@ namespace ClassLibrary
         //1: Regular - 0:Free
         private short _status;
         private string _name;
-        private Student _student;
+        private List<Student> _students;
+        private List<Professor> _professors;
         private List<Exam> _exams;
 
 
@@ -20,31 +21,35 @@ namespace ClassLibrary
         {
             _status = -1;
             _name = "";
-            _student = new Student();
+            _students = new List<Student>();
+            _professors = new List<Professor>();
             _exams = new List<Exam>();
         }
 
-        public SubjectInCourse(short status, string name, Student student, List<Exam> exams)
+        public SubjectInCourse(short status, string name, List<Student> students, List<Exam> exams)
         {
             _status = status;
             _name = name;
-            _student = student;
+            _students = students;
             _exams = exams;
         }
 
-        public SubjectInCourse(short status, string name, Student student)
+        public SubjectInCourse(short status, string name, Student student) //admin form 259
         {
             _status = status;
             _name = name;
-            _student = student;
+            _students = new List<Student>();
+            _professors = new List<Professor>();
             _exams = new List<Exam>();
+            _students.Add(student);
         }
 
         public SubjectInCourse(short status, string name)
         {
             _status = status;
             _name = name;
-            _student = new Student();
+            _students = new List<Student>();
+            _professors = new List<Professor>();
             _exams = new List<Exam>();
 
         }
@@ -53,18 +58,18 @@ namespace ClassLibrary
 
         public string Name { get { return _name; } }
 
-        public Student Student { get { return _student; } set { _student = value; } }
+        public List<Student> Students { get { return _students; } set { _students = value; } }
 
-        public string StudentEmail { get { return _student.Email; } }
+        public List<Professor> Professors { get { return _professors; } set { _professors = value; } }
 
         public List<Exam> Exams { get { return _exams; } set { _exams = value; } }
 
         public static bool operator ==(SubjectInCourse subject, string name)
         {
             bool r = false;
-            if(subject is not null && name != "")
+            if (subject is not null && name != "")
             {
-                if(subject.Name == name)
+                if (subject.Name == name)
                 {
                     r = true;
                 }
@@ -81,12 +86,13 @@ namespace ClassLibrary
         public static bool operator ==(SubjectInCourse subject, Student student)
         {
             bool r = false;
-            if(subject is not null && student is not null)
+            if (subject is not null && student is not null)
             {
-                if(subject.Student == student)
-                {
-                    r = true;
-                }
+                for (int i = 0; i < subject.Students.Count; i++)
+                    if (subject.Students[i] == student)
+                    {
+                        r = true;
+                    }
             }
             return r;
         }

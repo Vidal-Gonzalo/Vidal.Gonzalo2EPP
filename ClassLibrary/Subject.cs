@@ -11,19 +11,8 @@ namespace ClassLibrary
         private int _id;
         private string _name;
         private int _period;
-        private List<Professor> _professors;
-        private List<Student> _students;
         private int _correlativeId;
 
-        public Subject(int id, string name, short period, List<Professor> professors, List<Student> students, short correlativeId)
-        {
-            _id = id;
-            _name = name;
-            _period = period;
-            _professors = professors;
-            _students = students;
-            _correlativeId = correlativeId;
-        }
 
         public Subject(int id, string name, int period, int correlativeId)
         {
@@ -31,8 +20,14 @@ namespace ClassLibrary
             _name = name;
             _period = period;
             _correlativeId = correlativeId;
-            _professors = new List<Professor>();
-            _students = new List<Student>();
+        }
+
+        public Subject(string name, int period, int correlativeId)
+        {
+            _id = 0;
+            _name = name;
+            _period = period;
+            _correlativeId = correlativeId;
         }
 
         public int Id { get { return _id; } }
@@ -41,29 +36,7 @@ namespace ClassLibrary
 
         public int Period { get { return _period; } }
 
-        public List<Professor> Professors { get { return _professors; } }
-    
-        public List<Student> Students { get { return _students; } }
-        
         public int CorrelativeId { get { return _correlativeId; } }
-
-        public static bool operator ==(Professor professor, Subject subject)
-        {
-            bool r = false;
-            for(int i = 0; i < subject.Professors.Count; i++)
-            {
-                if (subject.Professors[i].Id == professor.Id)
-                {
-                    r = true;
-                }
-            }
-            return r;
-        }
-
-        public static bool operator !=(Professor professor, Subject subject)
-        {
-            return !(professor == subject);
-        }
 
         public override bool Equals(object obj)
         {

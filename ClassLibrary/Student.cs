@@ -29,7 +29,7 @@ namespace ClassLibrary
         }
 
         public int StudentId { get { return _id; } }
-        
+
         public List<Subject> Subjects { get { return _subjects; } }
 
         public List<SubjectInCourse> SubjectsInCourse { get { return _subjectsInCourse; } set { _subjectsInCourse = value; } }

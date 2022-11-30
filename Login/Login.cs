@@ -33,8 +33,7 @@ namespace Login
                 Data.GetSubjects();
             }
 
-            Data.AssignSubjectsToUsers();
-
+            Data.AssignUsersToSubjects();
         }
 
         private void login_btn_Click(object sender, EventArgs e)

@@ -32,7 +32,6 @@ namespace Login
                     register_subject_cb.Items.Add(Data.Subjects[i].Name);
                 }
             }
-
             List<SubjectInCourse>? subjectsFromStudent = Data.GetSubjectsFromStudent(loggedStudent);
             if(subjectsFromStudent is not null)
             {
@@ -77,6 +76,7 @@ namespace Login
                     {
                         Data.EnrollSubjectToUser(loggedStudent.Id, subject);
                         MessageBox.Show("Inscripción realizada con exito!");
+                        Data.AssignUsersToSubjects();
                         RefreshForm();
                     }
                     else

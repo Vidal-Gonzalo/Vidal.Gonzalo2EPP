@@ -26,16 +26,21 @@ namespace Login
 
         private void Form4_Load(object sender, EventArgs e)
         {
-            List<Subject> subjectsAssigned = new List<Subject>();
+            List<SubjectInCourse> subjectsAssigned = new List<SubjectInCourse>();
             bool isSubjectAssigned = false;
 
-            foreach (Subject subject in Data.Subjects)
+            foreach (SubjectInCourse subject in Data.SubjectsInCourses)
             {
                 if (loggedProfessor == subject)
                 {
                     subjectsAssigned.Add(subject);
                     isSubjectAssigned = true;
                 }
+            }
+
+            foreach (SubjectInCourse subject in subjectsAssigned)
+            {
+
             }
 
             if (!isSubjectAssigned)
@@ -49,8 +54,7 @@ namespace Login
                 {
                     change_calification_cb.Items.Add(subjectsAssigned[i].Name);
                     assigned_subjects_grid.Rows.Add();
-                    assigned_subjects_grid.Rows[i].Cells[0].Value = subjectsAssigned[i].Id;
-                    assigned_subjects_grid.Rows[i].Cells[1].Value = subjectsAssigned[i].Name;
+                    assigned_subjects_grid.Rows[i].Cells[0].Value = subjectsAssigned[i].Name;
                 }
             }
             for (int i = 0; i < califications.Length; i++)
@@ -73,9 +77,8 @@ namespace Login
             assigned_subjects_grid.Hide();
             create_exam_grid.Show();
             int index = int.Parse(e.RowIndex.ToString());
-            string? subject = assigned_subjects_grid.Rows[index].Cells[1].Value.ToString();
+            string? subject = assigned_subjects_grid.Rows[index].Cells[0].Value.ToString();
             create_exam_label.Text = subject;
-
         }
 
         private void create_exam_button_Click(object sender, EventArgs e)
@@ -111,10 +114,9 @@ namespace Login
                     {
                         if (Data.SubjectsInCourses.Count >= change_calification_grid.Rows.Count)
                         {
-                            //Exception here
-                            Student student = Data.SubjectsInCourses[i].Student;
+                            //Student student = Data.SubjectsInCourses[i].Student;
                             change_calification_grid.Rows.Add();
-                            change_calification_grid.Rows[i].Cells[0].Value = student.Email;
+                            change_calification_grid.Rows[i].Cells[0].Value = "Prueba";
                             change_calification_grid.Rows[i].Cells[1].Value = change_calification_cb.SelectedItem.ToString();
                         }
                     }

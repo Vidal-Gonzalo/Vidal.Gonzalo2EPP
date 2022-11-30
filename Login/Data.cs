@@ -1,8 +1,13 @@
 ﻿using ClassLibrary;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Login
 {
@@ -224,7 +229,8 @@ namespace Login
             return r;
         }
 
-        public static bool AssignSubjectsToUsers()
+
+        public static bool AssignUsersToSubjects()
         {
             bool r = false;
             try
@@ -236,19 +242,31 @@ namespace Login
                 while (reader.Read())
                 {
                     SubjectInCourse subjectInCourse = new(Convert.ToInt16(reader["ESTADO"]), reader["NOMBRE"].ToString());
-                    Student? studentAux = FindStudentById(Convert.ToInt16(reader["ID_USUARIO"]));
-                    if (studentAux is not null)
+                    User? user = FindUserById(Convert.ToInt16(reader["ID_USUARIO"]));
+                    if (user is not null)
                     {
-                        if (!CheckIfSubjectExists(subjectInCourse.Name, studentAux.Email))
+                        switch (user.Role)
                         {
-                            Student student = studentAux;
-                            if (subjectInCourse != student)
-                            {
-                                subjectInCourse.Student = student;
-                                _subjectsInCourse1.Add(subjectInCourse);
-                                MessageBox.Show($"Assigned subject: {subjectInCourse.Name} - {subjectInCourse.Status.ToString()} , student: {student.Email}");
-                            }
-                            r = true;
+                            case 2:
+                                Professor professor = new(user.Id, user.Email, user.Password, user.Role);
+                                if (!CheckIfProfessorExists(subjectInCourse.Name, professor.Email))
+                                {
+                                    subjectInCourse.Professors.Add(professor);
+                                }
+                                break;
+                            case 3:
+                                Student student = new(user.Id, user.Email, user.Password, user.Role);
+                                if (!CheckIfSubjectContainsStudent(subjectInCourse.Name, student.Email))
+                                {
+                                    subjectInCourse.Students.Add(student);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        if (!CheckIfSubjectInCourseContainsSubject(subjectInCourse.Name, user.Id))
+                        {
+                            _subjectsInCourse1.Add(subjectInCourse);
                         }
                     }
                 }
@@ -261,6 +279,61 @@ namespace Login
             {
                 _sqlConnection.Close();
             }
+            return r;
+        }
+
+
+
+
+        public static bool ChangeSubjectStatus(int userId, string subjectName, int status)
+        {
+            bool r = false;
+            try
+            {
+                _sqlCommand.Parameters.Clear();
+                _sqlConnection.Open();
+                _sqlCommand.CommandText = "UPDATE MATERIAS_A_USUARIOS SET ESTADO=@status WHERE(ID_USUARIO=@user_id) AND (NOMBRE=@subject)";
+                _sqlCommand.Parameters.AddWithValue("@status", status);
+                _sqlCommand.Parameters.AddWithValue("@user_id", userId);
+                _sqlCommand.Parameters.AddWithValue("@subject", subjectName);
+                _sqlCommand.ExecuteNonQuery();
+                r = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("El error esta en " + ex.Message);
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+
+            return r;
+        }
+
+        public static bool RegisterSubject(string name, short period, short correlativeId)
+        {
+            bool r = false;
+            try
+            {
+                _sqlCommand.Parameters.Clear();
+                _sqlConnection.Open();
+                _sqlCommand.CommandText = "INSERT INTO MATERIAS (NOMBRE, PERIODO, CORRELATIVA) VALUES (@nombre, @periodo, @correlativa)";
+                _sqlCommand.Parameters.AddWithValue("@nombre", name);
+                _sqlCommand.Parameters.AddWithValue("@periodo", period);
+                _sqlCommand.Parameters.AddWithValue("@correlativa", correlativeId);
+                _sqlCommand.ExecuteNonQuery();
+                r = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+
             return r;
         }
 
@@ -291,6 +364,34 @@ namespace Login
             return r;
         }
 
+        public static bool AssignProfessorToSubject(int userId, string subjectName, int status)
+        {
+            bool r = false;
+            int exam = 0;
+            try
+            {
+                _sqlCommand.Parameters.Clear();
+                _sqlConnection.Open();
+                _sqlCommand.CommandText = "INSERT INTO MATERIAS_A_USUARIOS(ID_USUARIO, ESTADO, NOMBRE, EXAMEN) VALUES(@id_usuario, @estado, @nombre, @examen)";
+                _sqlCommand.Parameters.AddWithValue("@id_usuario", userId);
+                _sqlCommand.Parameters.AddWithValue("@estado", status);
+                _sqlCommand.Parameters.AddWithValue("@nombre", subjectName);
+                _sqlCommand.Parameters.AddWithValue("@examen", exam);
+                _sqlCommand.ExecuteNonQuery();
+                r = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("El error esta en " + ex.Message);
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+
+            return r;
+        }
+
         public static User? CheckLogin(string email, string password)
         {
             User user = GetEmailUser(email);
@@ -304,8 +405,6 @@ namespace Login
 
             return null;
         }
-
-
 
         public static Student? FindStudentByEmail(string? email)
         {
@@ -331,6 +430,38 @@ namespace Login
                     if (student.Id == id)
                     {
                         return student;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static Professor? FindProfessorById(int id)
+        {
+            if (id > 0)
+            {
+                foreach (Professor professor in _professors)
+                {
+                    if (professor.Id == id)
+                    {
+                        return professor;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static User? FindUserById(int id)
+        {
+            if (id > 0)
+            {
+                foreach (User user in _users)
+                {
+                    if (user.Id == id)
+                    {
+                        return user;
                     }
                 }
             }
@@ -370,22 +501,6 @@ namespace Login
             return null;
         }
 
-        public static SubjectInCourse? FindSubjectByName(Student? student, string? name)
-        {
-            SubjectInCourse subjectInCourse = new();
-            if (name != "" && student is not null)
-            {
-                foreach (SubjectInCourse subject in _subjectsInCourse1)
-                {
-                    if (subject.Name == name)
-                    {
-                        subjectInCourse = subject;
-                    }
-                }
-            }
-            return subjectInCourse;
-        }
-
         public static Subject? FindSubjectById(short subjectId)
         {
             if (subjectId > 0)
@@ -401,22 +516,9 @@ namespace Login
 
             return null;
         }
-        public static bool AssignProfessorToSubject(short subjectId, Professor professor)
-        {
-            bool r = false;
-            if (subjectId > 0 && professor is not null)
-            {
-                Subject? subject = FindSubjectById(subjectId);
-                if (subject is not null)
-                {
-                    subject.Professors.Add(professor);
-                    r = true;
-                }
-            }
-            return r;
-        }
 
-        public static SubjectInCourse? FindSubjectInCourseByName(string name)
+
+        public static SubjectInCourse? FindSubjectInCourseByName(string? name)
         {
             if (name != "")
             {
@@ -431,21 +533,59 @@ namespace Login
             return null;
         }
 
+        public static bool CheckIfSubjectInCourseContainsSubject(string subjectInCourse, int userId)
+        {
+            bool r = false;
+            if (subjectInCourse != "" && userId > 0)
+            {
+                foreach (SubjectInCourse item in SubjectsInCourses)
+                {
+                    if (item.Name == subjectInCourse)
+                    {
+                        for (int i = 0; i < item.Students.Count; i++)
+                        {
+                            if (item.Students[i].Id == userId)
+                            {
+                                MessageBox.Show("entre");
+                                r = true;
+                                break;
+                            }
+                        }
+                        for (int i = 0; i < item.Professors.Count; i++)
+                        {
+                            if (item.Professors[i].Id == userId)
+                            {
+                                MessageBox.Show("entre");
+                                r = true;
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
+            return r;
+        }
 
         public static bool CheckIfSubjectContainsStudent(string subject, string student)
         {
             bool r = false;
             if (student != "")
             {
-                foreach (SubjectInCourse item in SubjectsInCourses)
+                for (int i = 0; i < SubjectsInCourses.Count; i++)
                 {
-                    if (item.Name == subject)
+                    if (SubjectsInCourses[i].Name == subject)
                     {
-                        if (item.StudentEmail == student)
+                        for (int j = 0; j < SubjectsInCourses[i].Students.Count; j++)
                         {
-                            r = true;
+                            if (SubjectsInCourses[i].Students[j].Email == student)
+                            {
+                                r = true;
+                            }
                         }
+                        break;
                     }
+
                 }
             }
             return r;
@@ -462,13 +602,22 @@ namespace Login
             return r;
         }
 
-        public static bool CheckIfSubjectExists(string subjectName, string studentEmail)
+
+        public static bool CheckIfProfessorExists(string subjectName, string professorEmail)
         {
             bool r = false;
-            foreach (SubjectInCourse item in _subjectsInCourse1)
+            for (int i = 0; i < SubjectsInCourses.Count; i++)
             {
-                if (item.Name == subjectName && item.Student.Email == studentEmail)
-                    r = true;
+                if (subjectName == SubjectsInCourses[i].Name)
+                {
+                    for (int j = 0; j < SubjectsInCourses[i].Professors.Count; j++)
+                    {
+                        if (professorEmail == SubjectsInCourses[i].Professors[j].Email)
+                        {
+                            r = true;
+                        }
+                    }
+                }
             }
             return r;
         }
@@ -476,10 +625,16 @@ namespace Login
         public static List<SubjectInCourse>? GetSubjectsFromStudent(Student student)
         {
             List<SubjectInCourse> subjectsFromStudent = new List<SubjectInCourse>();
-            foreach (SubjectInCourse item in _subjectsInCourse1)
+
+            for (int i = 0; i < SubjectsInCourses.Count; i++)
             {
-                if (item.StudentEmail == student.Email)
-                    subjectsFromStudent.Add(item);
+                for (int j = 0; j < SubjectsInCourses[i].Students.Count; j++)
+                {
+                    if (SubjectsInCourses[i].Students[j].Email == student.Email)
+                    {
+                        subjectsFromStudent.Add(SubjectsInCourses[i]);
+                    }
+                }
             }
             if (subjectsFromStudent.Count > 0)
             {
@@ -506,7 +661,3 @@ namespace Login
 
     }
 }
-
-
-//Entiendo que este no es el mejor método para solucionar el problema pero estoy tratando de imitar una base de datos para no tener que 
-//terminar haciendo prop drilling.
