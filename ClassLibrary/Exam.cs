@@ -8,19 +8,25 @@ namespace ClassLibrary
 {
     public class Exam
     {
+        private int _userId;
+        private string _subject;
         private string _name;
-        private string _date;
+        private DateTime _date;
         private int _calification;
 
-        public Exam(string name, string date, int calification)
+        public Exam(int userId, string subject, string name, DateTime date, int calification)
         {
+            _userId = userId;
             _name = name;
             _date = date;
             _calification = calification;
+            _subject = subject;
         }
 
-        public Exam(string name, string date)
+        public Exam(int userId, string subject, string name, DateTime date)
         {
+            _userId = userId;
+            _subject = subject;
             _name = name;
             _date = date;
             _calification = -1;
@@ -28,15 +34,18 @@ namespace ClassLibrary
 
         public Exam()
         {
+            _userId = 0;
+            _subject = "";
             _name = "";
-            _date = "";
+            _date = new DateTime();
             _calification = 0;
         }
 
-
+        public int UserId { get { return _userId; } }
+        public string Subject { get { return _subject; } }
         public string Name { get { return _name; } set { _name = value; } }
 
-        public string Date { get { return _date; } set { _date = value; } }
+        public DateTime Date { get { return _date; } set { _date = value; } }
 
         public int Calification { get { return _calification; } set { _calification = value; } }
     }

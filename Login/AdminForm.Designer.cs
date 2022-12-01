@@ -78,8 +78,11 @@
             this.register_subject_cb_student = new System.Windows.Forms.ComboBox();
             this.register_subject_button = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.export_students_subjects_cb = new System.Windows.Forms.ComboBox();
+            this.export_students_btn = new System.Windows.Forms.Button();
+            this.export_students_format_cb = new System.Windows.Forms.ComboBox();
+            this.export_students_lbl1 = new System.Windows.Forms.Label();
+            this.export_students_lbl2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.students_names)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.student_subjects)).BeginInit();
             this.user_register_section.SuspendLayout();
@@ -559,36 +562,66 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(582, 579);
+            this.label14.Location = new System.Drawing.Point(582, 562);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(159, 15);
             this.label14.TabIndex = 25;
             this.label14.Text = "Exportar alumnos de materia";
             // 
-            // comboBox1
+            // export_students_subjects_cb
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(582, 605);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(159, 23);
-            this.comboBox1.TabIndex = 26;
+            this.export_students_subjects_cb.FormattingEnabled = true;
+            this.export_students_subjects_cb.Location = new System.Drawing.Point(485, 605);
+            this.export_students_subjects_cb.Name = "export_students_subjects_cb";
+            this.export_students_subjects_cb.Size = new System.Drawing.Size(159, 23);
+            this.export_students_subjects_cb.TabIndex = 26;
             // 
-            // button2
+            // export_students_btn
             // 
-            this.button2.Location = new System.Drawing.Point(627, 649);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 27;
-            this.button2.Text = "Exportar";
-            this.button2.UseVisualStyleBackColor = true;
+            this.export_students_btn.Location = new System.Drawing.Point(627, 649);
+            this.export_students_btn.Name = "export_students_btn";
+            this.export_students_btn.Size = new System.Drawing.Size(75, 23);
+            this.export_students_btn.TabIndex = 27;
+            this.export_students_btn.Text = "Exportar";
+            this.export_students_btn.UseVisualStyleBackColor = true;
+            this.export_students_btn.Click += new System.EventHandler(this.export_students_btn_Click);
+            // 
+            // export_students_format_cb
+            // 
+            this.export_students_format_cb.FormattingEnabled = true;
+            this.export_students_format_cb.Location = new System.Drawing.Point(679, 605);
+            this.export_students_format_cb.Name = "export_students_format_cb";
+            this.export_students_format_cb.Size = new System.Drawing.Size(159, 23);
+            this.export_students_format_cb.TabIndex = 28;
+            // 
+            // export_students_lbl1
+            // 
+            this.export_students_lbl1.AutoSize = true;
+            this.export_students_lbl1.Location = new System.Drawing.Point(546, 584);
+            this.export_students_lbl1.Name = "export_students_lbl1";
+            this.export_students_lbl1.Size = new System.Drawing.Size(47, 15);
+            this.export_students_lbl1.TabIndex = 29;
+            this.export_students_lbl1.Text = "Materia";
+            // 
+            // export_students_lbl2
+            // 
+            this.export_students_lbl2.AutoSize = true;
+            this.export_students_lbl2.Location = new System.Drawing.Point(740, 578);
+            this.export_students_lbl2.Name = "export_students_lbl2";
+            this.export_students_lbl2.Size = new System.Drawing.Size(52, 15);
+            this.export_students_lbl2.TabIndex = 30;
+            this.export_students_lbl2.Text = "Formato";
             // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(865, 749);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.export_students_lbl2);
+            this.Controls.Add(this.export_students_lbl1);
+            this.Controls.Add(this.export_students_format_cb);
+            this.Controls.Add(this.export_students_btn);
+            this.Controls.Add(this.export_students_subjects_cb);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.register_subject_button);
             this.Controls.Add(this.register_subject_cb_student);
@@ -673,7 +706,10 @@
         private System.Windows.Forms.ComboBox register_subject_cb_student;
         private System.Windows.Forms.Button register_subject_button;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ComboBox export_students_subjects_cb;
+        private System.Windows.Forms.Button export_students_btn;
+        private System.Windows.Forms.ComboBox export_students_format_cb;
+        private System.Windows.Forms.Label export_students_lbl1;
+        private System.Windows.Forms.Label export_students_lbl2;
     }
 }

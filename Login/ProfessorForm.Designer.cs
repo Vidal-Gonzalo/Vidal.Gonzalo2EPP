@@ -263,7 +263,7 @@
             this.change_calification_gb.Controls.Add(this.change_calification_subject);
             this.change_calification_gb.Controls.Add(this.change_califications_exams_grid);
             this.change_calification_gb.Controls.Add(this.change_calification_student);
-            this.change_calification_gb.Location = new System.Drawing.Point(454, 150);
+            this.change_calification_gb.Location = new System.Drawing.Point(476, 159);
             this.change_calification_gb.Name = "change_calification_gb";
             this.change_calification_gb.Size = new System.Drawing.Size(324, 178);
             this.change_calification_gb.TabIndex = 11;

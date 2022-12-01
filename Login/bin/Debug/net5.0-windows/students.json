@@ -1,0 +1,18 @@
+[
+  {
+    "StudentId": 2,
+    "Exams": [],
+    "Id": 2,
+    "Email": "gonzalo@gmail.com",
+    "Password": "$2a$12$OYM5aSeSGQ0AoWCVjRhgsu253I9tcAqficpuSiSPJOXoE8IsOqjby",
+    "Role": 3
+  },
+  {
+    "StudentId": 5,
+    "Exams": [],
+    "Id": 5,
+    "Email": "vidal@gmail.com",
+    "Password": "$2a$12$QeobtcECnJ/Cm7.1rUNr0.1LwNv0EpHgI.OTGznGkktx5oR29Qngy",
+    "Role": 3
+  }
+]

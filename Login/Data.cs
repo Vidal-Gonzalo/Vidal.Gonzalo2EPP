@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace Login
@@ -136,6 +137,109 @@ namespace Login
             return r;
         }
 
+        public static bool GetExams()
+        {
+            bool r = false;
+            try
+            {
+                _sqlCommand.Parameters.Clear();
+                _sqlCommand.CommandText = $"SELECT * FROM EXAMENES";
+                _sqlConnection.Open();
+                SqlDataReader reader = _sqlCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Student? studentAux = FindStudentById(Convert.ToInt16(reader["ID_USUARIO"]));
+                    if (studentAux is not null)
+                    {
+                        Student student = studentAux;
+                        Exam exam = new Exam(Convert.ToInt32(reader["ID_USUARIO"]), reader["MATERIA"].ToString(), reader["NOMBRE"].ToString(), Convert.ToDateTime(reader["FECHA"]), Convert.ToInt32(reader["CALIFICACION"]));
+                        if (!CheckIfStudentContainsExam(exam.Name, student))
+                        {
+                            student.Exams.Add(exam);
+                        }
+                        SubjectInCourse? subjectInCourse = FindSubjectInCourseByName(exam.Subject);
+                        if (subjectInCourse is not null)
+                        {
+                            if(!CheckIfSubjectContainsExam(exam.Name, subjectInCourse))
+                            {
+                                subjectInCourse.Exams.Add(exam);
+                            }
+                          
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("(Get exams) El error está en: " + ex.Message);
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+            return r;
+        }
+
+        public static bool AssignExams(string nameSubject, DateTime date, int userId, string examName)
+        {
+            bool r = false;
+            try
+            {
+                _sqlCommand.Parameters.Clear();
+                SubjectInCourse? subjectInCourse = FindSubjectInCourseByName(nameSubject);
+                _sqlConnection.Open();
+                if (subjectInCourse is not null)
+                {
+                    _sqlCommand.CommandText = $"INSERT INTO EXAMENES(ID_USUARIO, MATERIA, NOMBRE, FECHA, CALIFICACION) VALUES(@id_usuario, @materia, @nombre, @fecha, @calificacion)";
+                    _sqlCommand.Parameters.AddWithValue("@id_usuario", userId);
+                    _sqlCommand.Parameters.AddWithValue("@materia", subjectInCourse.Name);
+                    _sqlCommand.Parameters.AddWithValue("@nombre", examName);
+                    _sqlCommand.Parameters.AddWithValue("@fecha", date);
+                    _sqlCommand.Parameters.AddWithValue("@calificacion", 0);
+                }
+
+                _sqlCommand.ExecuteNonQuery();
+
+                r = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("El error está en: " + ex.Message);
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+            return r;
+        }
+
+        public static bool ChangeCalification(int calification, int userId, string examName)
+        {
+            bool r = false;
+            try
+            {
+                _sqlCommand.Parameters.Clear();
+                _sqlConnection.Open();
+                _sqlCommand.CommandText = "UPDATE EXAMENES SET CALIFICACION=@calificacion WHERE(ID_USUARIO=@id_usuario) AND (NOMBRE=@examen)";
+                _sqlCommand.Parameters.AddWithValue("@calificacion", calification);
+                _sqlCommand.Parameters.AddWithValue("@id_usuario", userId);
+                _sqlCommand.Parameters.AddWithValue("@examen", examName);
+                _sqlCommand.ExecuteNonQuery();
+                r = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("El error esta en " + ex.Message);
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+
+            return r;
+        }
+
         public static User GetEmailUser(string email)
         {
             User userAux = new();
@@ -202,6 +306,28 @@ namespace Login
             return r;
         }
 
+        public static List<Exam>? GetStudentExamsBySubject(Student student, string subject)
+        {
+            List<Exam> studentExams = new List<Exam>();
+            if(student is not null)
+            {
+                for(int i = 0; i < student.Exams.Count; i++)
+                {
+                    if(student.Exams[i].Subject == subject)
+                    {
+                        studentExams.Add(student.Exams[i]);
+                    }
+                }
+            }
+            if(studentExams.Count > 0)
+            {
+                return studentExams;
+            } else
+            {
+                return null;
+            }
+        }
+
         public static bool EnrollSubjectToUser(int idUser, string nameSubject)
         {
             bool r = false;
@@ -243,28 +369,72 @@ namespace Login
                 {
                     SubjectInCourse subjectInCourse = new(Convert.ToInt16(reader["ESTADO"]), reader["NOMBRE"].ToString());
                     User? user = FindUserById(Convert.ToInt16(reader["ID_USUARIO"]));
+                    bool found = false;
+                    bool newSubject = false;
                     if (user is not null)
                     {
                         switch (user.Role)
                         {
                             case 2:
                                 Professor professor = new(user.Id, user.Email, user.Password, user.Role);
-                                if (!CheckIfProfessorExists(subjectInCourse.Name, professor.Email))
+                                if (SubjectsInCourses.Count > 0)
+                                {
+                                    for (int i = 0; i < SubjectsInCourses.Count; i++)
+                                    {
+                                        if (SubjectsInCourses[i].Name == reader["NOMBRE"].ToString())
+                                        {
+                                            if (!CheckIfProfessorExists(SubjectsInCourses[i].Name, professor.Email))
+                                            {
+                                                SubjectsInCourses[i].Professors.Add(professor);
+                                            }
+                                            found = true;
+                                        }
+                                    }
+                                    if (!found)
+                                    {
+                                        subjectInCourse.Professors.Add(professor);
+                                        newSubject = true;
+                                    }
+
+                                }
+                                else
                                 {
                                     subjectInCourse.Professors.Add(professor);
+                                    newSubject = true;
                                 }
+
                                 break;
                             case 3:
                                 Student student = new(user.Id, user.Email, user.Password, user.Role);
-                                if (!CheckIfSubjectContainsStudent(subjectInCourse.Name, student.Email))
+                                if (SubjectsInCourses.Count > 0)
+                                {
+                                    for (int i = 0; i < SubjectsInCourses.Count; i++)
+                                    {
+                                        if (SubjectsInCourses[i].Name == reader["NOMBRE"].ToString())
+                                        {
+                                            if (!CheckIfSubjectContainsStudent(SubjectsInCourses[i].Name, student.Email))
+                                            {
+                                                SubjectsInCourses[i].Students.Add(student);
+                                            }
+                                            found = true;
+                                        }
+                                    }
+                                    if (!found)
+                                    {
+                                        subjectInCourse.Students.Add(student);
+                                        newSubject = true;
+                                    }
+                                }
+                                else
                                 {
                                     subjectInCourse.Students.Add(student);
+                                    newSubject = true;
                                 }
                                 break;
                             default:
                                 break;
                         }
-                        if (!CheckIfSubjectInCourseContainsSubject(subjectInCourse.Name, user.Id))
+                        if (!CheckIfSubjectInCourseContainsSubject(subjectInCourse.Name, user.Id) && newSubject)
                         {
                             _subjectsInCourse1.Add(subjectInCourse);
                         }
@@ -404,6 +574,31 @@ namespace Login
             }
 
             return null;
+        }
+
+        public static List<Student> GetStudentsFromSubject(SubjectInCourse subject)
+        {
+            List<Student> students = new List<Student>();
+
+            foreach (Student student in subject.Students)
+            {
+                students.Add(student);
+            }
+            return students;
+        }
+
+        public static List<SubjectInCourse> GetProfessorSubjects(Professor professor)
+        {
+            List<SubjectInCourse> subjectsAssigned = new List<SubjectInCourse>();
+
+            foreach (SubjectInCourse subject in SubjectsInCourses)
+            {
+                if (professor == subject)
+                {
+                    subjectsAssigned.Add(subject);
+                }
+            }
+            return subjectsAssigned;
         }
 
         public static Student? FindStudentByEmail(string? email)
@@ -546,7 +741,6 @@ namespace Login
                         {
                             if (item.Students[i].Id == userId)
                             {
-                                MessageBox.Show("entre");
                                 r = true;
                                 break;
                             }
@@ -555,7 +749,6 @@ namespace Login
                         {
                             if (item.Professors[i].Id == userId)
                             {
-                                MessageBox.Show("entre");
                                 r = true;
                                 break;
                             }
@@ -583,6 +776,42 @@ namespace Login
                                 r = true;
                             }
                         }
+                        break;
+                    }
+
+                }
+            }
+            return r;
+        }
+
+        public static bool CheckIfStudentContainsExam(string exam, Student student)
+        {
+            bool r = false;
+            if (student is not null)
+            {
+                for (int i = 0; i < student.Exams.Count; i++)
+                {
+                    if (student.Exams[i].Name == exam)
+                    {
+                        r = true;
+                        break;
+                    }
+
+                }
+            }
+            return r;
+        }
+
+        public static bool CheckIfSubjectContainsExam(string exam, SubjectInCourse subjectInCourse)
+        {
+            bool r = false;
+            if (subjectInCourse is not null)
+            {
+                for (int i = 0; i < subjectInCourse.Exams.Count; i++)
+                {
+                    if (subjectInCourse.Exams[i].Name == exam)
+                    {
+                        r = true;
                         break;
                     }
 
@@ -646,15 +875,24 @@ namespace Login
             }
         }
 
-        public static bool CorrectNumberOfSubjects(int max, Student student)
+        public static bool CorrectNumberOfSubjects(int max, List<SubjectInCourse> subjectsInCourse, string student)
         {
             bool r = false;
-            if (max >= 0 && student is not null)
+            if (max >= 0 && subjectsInCourse is not null)
             {
-                if (student.SubjectsInCourse.Count < max)
+                int sum = 0;
+                for (int i = 0; i < subjectsInCourse.Count; i++)
                 {
-                    r = true;
+                    for (int j = 0; j < subjectsInCourse[i].Students.Count; j++)
+                    {
+                        if (subjectsInCourse[i].Students[j].Email == student)
+                        {
+                            sum++;
+                        }
+                    }
                 }
+                if (sum <= max)
+                    r = true;
             }
             return r;
         }

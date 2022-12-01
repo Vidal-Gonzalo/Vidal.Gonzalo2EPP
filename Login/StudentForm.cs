@@ -18,13 +18,16 @@ namespace Login
         public StudentForm(Student student)
         {
             InitializeComponent();
-            loggedStudent = student;
+            Student? studentAux = Data.FindStudentByEmail(student.Email);
+            if (studentAux is not null)
+            {
+                loggedStudent = studentAux;
+            }
         }
 
         private void Form3_Load(object sender, EventArgs e)
         {
             student_greeting.Text = $"Hola {loggedStudent.Email}!";
-
             if (register_subject_cb.Items.Count == 0)
             {
                 for (int i = 0; i < Data.Subjects.Count; i++)
@@ -33,17 +36,22 @@ namespace Login
                 }
             }
             List<SubjectInCourse>? subjectsFromStudent = Data.GetSubjectsFromStudent(loggedStudent);
-            if(subjectsFromStudent is not null)
+            if (subjectsFromStudent is not null)
             {
-                for(int i = 0; i < subjectsFromStudent.Count; i++)
+                for (int i = 0; i < subjectsFromStudent.Count; i++)
                 {
                     if (subjectsFromStudent.Count >= subjects_list.Rows.Count)
                     {
                         subjects_list.Rows.Add();
                         subjects_list.Rows[i].Cells[0].Value = subjectsFromStudent[i].Name;
-                        var lista = subjectsFromStudent[i].Exams.Select(x => x.Calification.ToString()).ToList();
-                        var finalString = string.Join(",", lista);
-                        subjects_list.Rows[i].Cells[1].Value = finalString;
+                        List<Exam>? examList = Data.GetStudentExamsBySubject(loggedStudent, subjectsFromStudent[i].Name);
+                        if(examList is not null)
+                        {
+                            var lista = examList.Select(x => x.Calification.ToString()).ToList();
+                            var finalString = string.Join(",", lista);
+                            subjects_list.Rows[i].Cells[1].Value = finalString;
+                        }
+                       
                     }
                 }
             }

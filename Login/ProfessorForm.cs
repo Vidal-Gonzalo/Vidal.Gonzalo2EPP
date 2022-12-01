@@ -26,24 +26,10 @@ namespace Login
 
         private void Form4_Load(object sender, EventArgs e)
         {
-            List<SubjectInCourse> subjectsAssigned = new List<SubjectInCourse>();
-            bool isSubjectAssigned = false;
+            List<SubjectInCourse> subjectsAssigned = Data.GetProfessorSubjects(loggedProfessor);
 
-            foreach (SubjectInCourse subject in Data.SubjectsInCourses)
-            {
-                if (loggedProfessor == subject)
-                {
-                    subjectsAssigned.Add(subject);
-                    isSubjectAssigned = true;
-                }
-            }
 
-            foreach (SubjectInCourse subject in subjectsAssigned)
-            {
-
-            }
-
-            if (!isSubjectAssigned)
+            if (subjectsAssigned.Count == 0)
             {
                 professor_form_greeting.Text = "No hay materias asignadas :(";
             }
@@ -83,29 +69,47 @@ namespace Login
 
         private void create_exam_button_Click(object sender, EventArgs e)
         {
-            foreach (SubjectInCourse item in Data.SubjectsInCourses)
+            List<SubjectInCourse> subjectsAssigned = Data.GetProfessorSubjects(loggedProfessor);
+
+            foreach (SubjectInCourse item in subjectsAssigned)
             {
                 if (item.Name == create_exam_label.Text)
                 {
                     if (create_exam_name.Text != "" && create_exam_datePicker.Text != "")
                     {
-                        Exam exam = new(create_exam_name.Text, create_exam_datePicker.Text);
-                        item.Exams.Add(exam);
-                        MessageBox.Show("Examen creado");
+                        bool r = false;
+                        DateTime date = Convert.ToDateTime(create_exam_datePicker.Text);
+                        foreach (Student student in item.Students)
+                        {
+                            r = Data.AssignExams(item.Name, date, student.Id, create_exam_name.Text);
+                            r = true;
+                            if (!r)
+                            {
+                                MessageBox.Show($"Hubo un error con la asignación de: {student.Email}.");
+                                break;
+                            }
+                        }
+                        if (r)
+                        {
+                            MessageBox.Show("Examen creado!");
+                            Data.GetExams();
+                        }
                         create_exam_grid.Hide();
                         assigned_subjects_grid.Show();
                         RefreshForm();
-                    } else
+                    }
+                    else
                     {
                         MessageBox.Show("Hubo un error");
                     }
-                   
+                    break;
                 }
             }
         }
 
         private void change_calification_search_Click(object sender, EventArgs e)
         {
+            change_calification_grid.Rows.Clear();
             for (int i = 0; i < Data.SubjectsInCourses.Count; i++)
             {
                 if (change_calification_cb.SelectedItem is not null)
@@ -114,10 +118,12 @@ namespace Login
                     {
                         if (Data.SubjectsInCourses.Count >= change_calification_grid.Rows.Count)
                         {
-                            //Student student = Data.SubjectsInCourses[i].Student;
-                            change_calification_grid.Rows.Add();
-                            change_calification_grid.Rows[i].Cells[0].Value = "Prueba";
-                            change_calification_grid.Rows[i].Cells[1].Value = change_calification_cb.SelectedItem.ToString();
+                            for (int j = 0; j < Data.SubjectsInCourses[i].Students.Count; j++)
+                            {
+                                change_calification_grid.Rows.Add();
+                                change_calification_grid.Rows[j].Cells[0].Value = Data.SubjectsInCourses[i].Students[j].Email;
+                                change_calification_grid.Rows[j].Cells[1].Value = change_calification_cb.SelectedItem.ToString();
+                            }
                         }
                     }
                     change_calification_grid.Show();
@@ -139,34 +145,42 @@ namespace Login
             int index = int.Parse(e.RowIndex.ToString());
             string? email = change_calification_grid.Rows[index].Cells[0].Value.ToString();
             string? subject = change_calification_grid.Rows[index].Cells[1].Value.ToString();
+            List<Exam> exams = new List<Exam>();
+
             if (email is not null && subject is not null)
             {
                 change_calification_student.Text = email;
                 change_calification_subject.Text = subject;
-                SubjectInCourse? subjectInCourseAux = Data.FindSubjectInCourseByName(subject);
-                if (subjectInCourseAux is not null)
+
+                Student? studentAux = Data.FindStudentByEmail(email);
+                if (studentAux is not null)
                 {
-                    SubjectInCourse subjectInCourse = subjectInCourseAux;
-                    if (subjectInCourse.Exams.Count > 0)
+                    Student student = studentAux;
+                    if (student.Exams.Count > 0)
                     {
-                        for (int i = 0; i < subjectInCourse.Exams.Count; i++)
+                        foreach (Exam exam in student.Exams)
                         {
-                            if (subjectInCourse.Exams.Count >= change_califications_exams_grid.Rows.Count)
+                            if (exam.Subject == subject)
                             {
-                                change_califications_exams_grid.Rows.Add();
-                                change_califications_exams_grid.Rows[i].Cells[0].Value = subjectInCourse.Exams[i].Name;
-                                change_califications_exams_grid.Rows[i].Cells[1].Value = subjectInCourse.Exams[i].Calification;
+                                exams.Add(exam);
                             }
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show("No hay examenes.");
-                    }
                 }
 
-            }
+                change_califications_exams_grid.Rows.Clear();
 
+                if (exams.Count >= change_califications_exams_grid.Rows.Count)
+                {
+                    for (int i = 0; i < exams.Count; i++)
+                    {
+                        change_califications_exams_grid.Rows.Add();
+                        change_califications_exams_grid.Rows[i].Cells[0].Value = exams[i].Name;
+                        change_califications_exams_grid.Rows[i].Cells[1].Value = exams[i].Calification;
+
+                    }
+                }
+            }
         }
 
         private void change_califications_exams_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -184,21 +198,22 @@ namespace Login
 
         private void change_exam_button_Click(object sender, EventArgs e)
         {
-            SubjectInCourse? subjectInCourseAux = Data.FindSubjectInCourseByName(change_calification_subject.Text);
+            Student? studentAux = Data.FindStudentByEmail(change_calification_student.Text);
             bool added = false;
-            if (subjectInCourseAux is not null)
+            if (studentAux is not null)
             {
-                SubjectInCourse subjectInCourse = subjectInCourseAux;
-                foreach (Exam exam in subjectInCourse.Exams)
+                Student student = studentAux;
+                //Esto esta mal. Actualiza todas las calificaciones. 
+                //También hay que verificar en la función de muestra de examenes que no se vuelvan a cargar.
+                foreach (Exam exam in student.Exams)
                 {
-                    if (exam.Name == exam_changing_calification_name.Text)
+                    if (exam.Name == exam_changing_calification_name.Text && exam.UserId == student.Id)
                     {
                         string? selectedCalification = exam_changing_califications_cb.SelectedItem.ToString();
-                        if (selectedCalification is not null && selectedCalification is not null)
+                        if (selectedCalification is not null)
                         {
                             int calification = int.Parse(selectedCalification);
-                            exam.Calification = calification;
-                            added = true;
+                            added = Data.ChangeCalification(calification, student.Id, exam.Name);
                             exam_changing_calification.Hide();
                             RefreshForm();
                         }
@@ -209,11 +224,21 @@ namespace Login
                         }
                     }
                 }
+
                 if (added)
+                {
+                    student.Exams.Clear();
+                    Data.GetExams();
                     MessageBox.Show("Calificación modificada con exito!");
+                }
                 else
+                {
                     MessageBox.Show("Hubo un error :(");
+                }
+
+
             }
+
         }
 
 

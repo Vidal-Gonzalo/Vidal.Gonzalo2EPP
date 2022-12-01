@@ -4,10 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.IO;
+using ServiceStack.Text;
 
 namespace ClassLibrary
 {
-    public class Admin : User
+    public class Admin : User, ISerialize<Student>
     {
         #region Fields
         #endregion
@@ -49,8 +53,8 @@ namespace ClassLibrary
             if (subjectList is not null && subjectName != "" && userId > 0 && status >= 0 && status <= 1)
             {
                 r = (bool)assign.DynamicInvoke(userId, subjectName, status);
-                if (r) 
-                    subjectList.Clear(); 
+                if (r)
+                    subjectList.Clear();
             }
             return r;
         }
@@ -101,6 +105,39 @@ namespace ClassLibrary
             return null;
         }
 
+        public bool SerializeToJson(List<Student> students)
+        {
+            bool r = false;
+            if (students is not null)
+            {
+                r = true;
+                string fileName = "studentsInJson.json";
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string jsonString = System.Text.Json.JsonSerializer.Serialize(students, options);
+
+                File.WriteAllText(fileName, jsonString);
+            }
+            return r;
+        }
+
+        public bool SerializeToCsv(List<Student> students)
+        {
+            bool r = false;
+            if (students is not null)
+            {
+                StringBuilder sb = new StringBuilder();
+                string fileName = "studentsInCsv";
+                foreach(Student student in students)
+                {
+                    var csv = CsvSerializer.SerializeToCsv(new[] { student });
+                    sb.AppendLine(csv);
+                }
+              
+                File.WriteAllText(fileName, sb.ToString());
+                r = true;
+            }
+            return r;
+        }
         #endregion
     }
 }

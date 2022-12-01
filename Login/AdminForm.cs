@@ -15,6 +15,7 @@ namespace Login
     public partial class AdminForm : Form
     {
         Admin loggedAdmin = new();
+        string[] formats = { "JSON", "CSV" };
 
         public AdminForm(Admin admin)
         {
@@ -53,9 +54,20 @@ namespace Login
             {
                 to_assign_professor.Items.Add(Data.Professors[i].Email);
             }
-
+            for (int i = 0; i < Data.SubjectsInCourses.Count; i++)
+            {
+                export_students_subjects_cb.Items.Add(Data.SubjectsInCourses[i].Name);
+            }
+            for (int i = 0; i < formats.Length; i++)
+            {
+                export_students_format_cb.Items.Add(formats[i]);
+            }
 
         }
+
+        private delegate bool RegisterCallback(string name, short period, short correlativeId);
+
+        private delegate bool AssignCallback(int userId, string subjectName, int status);
 
         private void createUser_button_Click(object sender, EventArgs e)
         {
@@ -253,12 +265,12 @@ namespace Login
                     if (studentAux is not null)
                     {
                         Student student = studentAux;
-                        bool areLessThanTwoSubjects = Data.CorrectNumberOfSubjects(2, student);
+                        bool areLessThanTwoSubjects = Data.CorrectNumberOfSubjects(3,Data.SubjectsInCourses, student.Email);
                         if (areLessThanTwoSubjects)
                         {
-                            SubjectInCourse subjectInCourse = new(1, subject, student);
-                            Data.SubjectsInCourses.Add(subjectInCourse);
+                            Data.EnrollSubjectToUser(student.Id, subject);
                             MessageBox.Show("Inscripción realizada con exito!");
+                            Data.AssignUsersToSubjects();
                             RefreshForm();
                         }
                         else
@@ -275,9 +287,38 @@ namespace Login
             }
         }
 
-        private delegate bool RegisterCallback(string name, short period, short correlativeId);
+        private void export_students_btn_Click(object sender, EventArgs e)
+        {
+            bool r = false;
+            string? subjectAux = export_students_subjects_cb.SelectedItem.ToString();
+            string? format = export_students_format_cb.SelectedItem.ToString();
 
-        private delegate bool AssignCallback(int userId, string subjectName, int status);
+            if(subjectAux is not null && format is not null)
+            {
+                SubjectInCourse? subjectInCourse = Data.FindSubjectInCourseByName(subjectAux);
+                if(subjectInCourse is not null)
+                {
+                    List<Student> students = Data.GetStudentsFromSubject(subjectInCourse);
+                    if(students.Count > 0)
+                    {
+                        if(format == "JSON")
+                        {
+                            r = loggedAdmin.SerializeToJson(students);
+                        } else if(format == "CSV")
+                        {
+                            r = loggedAdmin.SerializeToCsv(students);
+                        }
+                    }
+                }
+            }
+            if(r)
+            {
+                MessageBox.Show("Alumnos exportados correctamente");
+            } else
+            {
+                MessageBox.Show("Hubo un error");
+            }
+        }
 
         private void RefreshForm()
         {

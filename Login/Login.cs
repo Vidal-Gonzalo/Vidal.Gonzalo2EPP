@@ -32,8 +32,8 @@ namespace Login
             {
                 Data.GetSubjects();
             }
-
             Data.AssignUsersToSubjects();
+            Data.GetExams();
         }
 
         private void login_btn_Click(object sender, EventArgs e)
