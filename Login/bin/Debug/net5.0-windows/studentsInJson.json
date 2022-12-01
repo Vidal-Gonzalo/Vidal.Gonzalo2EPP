@@ -14,15 +14,5 @@
     "Email": "vidal@gmail.com",
     "Password": "$2a$12$QeobtcECnJ/Cm7.1rUNr0.1LwNv0EpHgI.OTGznGkktx5oR29Qngy",
     "Role": 3
-  },
-  {
-    "Email": "import@gmail.com",
-    "Password": "$2a$12$QeobtcECnJ/Cm7.1rUNr0.1LwNv0EpHgI.OTGznGkktx5oR29Qngy",
-    "Role": 3
-  },
-  {
-    "Email": "newimport@gmail.com",
-    "Password": "$2a$12$QeobtcECnJ/Cm7.1rUNr0.1LwNv0EpHgI.OTGznGkktx5oR29Qngy",
-    "Role": 3
   }
 ]

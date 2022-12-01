@@ -69,6 +69,7 @@ namespace Login
 
         private delegate bool AssignCallback(int userId, string subjectName, int status);
 
+        private delegate bool AddStudent(string email, string password);
         private void createUser_button_Click(object sender, EventArgs e)
         {
             //Refactorizar
@@ -321,11 +322,14 @@ namespace Login
 
         private void import_students_btn_Click(object sender, EventArgs e)
         {
-            bool r = loggedAdmin.DeserializeFromJson("students.json", Data.Students);
+            AddStudent assignFunction = new AddStudent(Data.AddStudent);
+            bool r = loggedAdmin.DeserializeFromJson(assignFunction, "students.json", Data.Students);
 
             if (r)
             {
                 MessageBox.Show("Alumnos importados");
+                Data.GetUsers();
+                RefreshForm();
             }
             else
             {

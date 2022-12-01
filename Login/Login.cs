@@ -26,7 +26,6 @@ namespace Login
             if (Data.Users.Count == 0)
             {
                 Data.GetUsers();
-
             }
             if (Data.Subjects.Count == 0)
             {

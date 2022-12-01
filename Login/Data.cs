@@ -327,6 +327,32 @@ namespace Login
                 return null;
             }
         }
+        public static bool AddStudent(string email, string password)
+        {
+            bool r = false;
+            try
+            {
+                _sqlCommand.Parameters.Clear();
+                _sqlConnection.Open();
+                _sqlCommand.CommandText = $"INSERT INTO USUARIOS(EMAIL, CONTRASEÑA, ROL) VALUES (@email, @password, @rol)";
+                _sqlCommand.Parameters.AddWithValue("@email", email);
+                _sqlCommand.Parameters.AddWithValue("@password", password);
+                _sqlCommand.Parameters.AddWithValue("@rol", 3);
+                _sqlCommand.ExecuteNonQuery();
+
+                r = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("El error está en: " + ex.Message);
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
+            return r;
+        }
+
 
         public static bool EnrollSubjectToUser(int idUser, string nameSubject)
         {

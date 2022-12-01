@@ -158,7 +158,7 @@ namespace ClassLibrary
             return r;
         }
 
-        public bool DeserializeFromJson(string path, List<Student> students) //Data.students
+        public bool DeserializeFromJson(Delegate addStudent, string path, List<Student> students) //Data.students
         {
             bool r = false;
             if (path != "" && students is not null)
@@ -171,7 +171,7 @@ namespace ClassLibrary
                     var list = System.Text.Json.JsonSerializer.Deserialize<List<Student>>(jsonString);
                     foreach (Student student in list)
                     {
-                        if (AddStudentToStudentsList(students, student))
+                        if (AddStudentToStudentsList(addStudent, students, student))
                         {
                             added = true;
                         }
@@ -190,7 +190,7 @@ namespace ClassLibrary
             return r;
         }
 
-        public bool AddStudentToStudentsList(List<Student> students, Student student)
+        public bool AddStudentToStudentsList(Delegate addStudent, List<Student> students, Student student)
         {
             bool r = false;
             if (students is not null && student is not null)
@@ -203,8 +203,7 @@ namespace ClassLibrary
                 }
                 if (!r)
                 {
-                    students.Add(student);
-                    r = true;
+                    r = (bool)addStudent.DynamicInvoke(student.Email, student.Password);
                 }
             }
             return r;
