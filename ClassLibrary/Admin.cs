@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
 using ServiceStack.Text;
+using System.Windows;
 
 namespace ClassLibrary
 {
@@ -145,14 +146,66 @@ namespace ClassLibrary
             {
                 StringBuilder sb = new StringBuilder();
                 string fileName = "studentsInCsv";
-                foreach(Student student in students)
+                foreach (Student student in students)
                 {
                     var csv = CsvSerializer.SerializeToCsv(new[] { student });
                     sb.AppendLine(csv);
                 }
-              
+
                 File.WriteAllText(fileName, sb.ToString());
                 r = true;
+            }
+            return r;
+        }
+
+        public bool DeserializeFromJson(string path, List<Student> students) //Data.students
+        {
+            bool r = false;
+            if (path != "" && students is not null)
+            {
+                bool exists = File.Exists(path);
+                if (exists)
+                {
+                    string jsonString = File.ReadAllText(path);
+                    bool added = false;
+                    var list = System.Text.Json.JsonSerializer.Deserialize<List<Student>>(jsonString);
+                    foreach (Student student in list)
+                    {
+                        if (AddStudentToStudentsList(students, student))
+                        {
+                            added = true;
+                        }
+                        else
+                        {
+                            added = false;
+                            break;
+                        }
+                    }
+                    if (added)
+                    {
+                        r = true;
+                    }
+                }
+            }
+            return r;
+        }
+
+        public bool AddStudentToStudentsList(List<Student> students, Student student)
+        {
+            bool r = false;
+            if (students is not null && student is not null)
+            {
+                for(int i = 0; i < students.Count; i++)
+                {
+                    r = students[i].Email == student.Email;
+                    if (r)
+                        break;
+                }
+                if (!r)
+                {
+                    students.Add(student);
+                    r = true;
+                }
             }
             return r;
         }

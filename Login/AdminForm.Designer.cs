@@ -83,6 +83,8 @@
             this.export_students_format_cb = new System.Windows.Forms.ComboBox();
             this.export_students_lbl1 = new System.Windows.Forms.Label();
             this.export_students_lbl2 = new System.Windows.Forms.Label();
+            this.import_students_lb = new System.Windows.Forms.Label();
+            this.import_students_btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.students_names)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.student_subjects)).BeginInit();
             this.user_register_section.SuspendLayout();
@@ -509,7 +511,7 @@
             // register_subject_title
             // 
             this.register_subject_title.AutoSize = true;
-            this.register_subject_title.Location = new System.Drawing.Point(144, 579);
+            this.register_subject_title.Location = new System.Drawing.Point(12, 579);
             this.register_subject_title.Name = "register_subject_title";
             this.register_subject_title.Size = new System.Drawing.Size(145, 15);
             this.register_subject_title.TabIndex = 19;
@@ -518,7 +520,7 @@
             // register_subject_cb_subject
             // 
             this.register_subject_cb_subject.FormattingEnabled = true;
-            this.register_subject_cb_subject.Location = new System.Drawing.Point(144, 623);
+            this.register_subject_cb_subject.Location = new System.Drawing.Point(12, 623);
             this.register_subject_cb_subject.Name = "register_subject_cb_subject";
             this.register_subject_cb_subject.Size = new System.Drawing.Size(145, 23);
             this.register_subject_cb_subject.TabIndex = 20;
@@ -526,7 +528,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(144, 605);
+            this.label12.Location = new System.Drawing.Point(12, 605);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(47, 15);
             this.label12.TabIndex = 21;
@@ -535,7 +537,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(144, 649);
+            this.label13.Location = new System.Drawing.Point(12, 649);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(50, 15);
             this.label13.TabIndex = 22;
@@ -544,14 +546,14 @@
             // register_subject_cb_student
             // 
             this.register_subject_cb_student.FormattingEnabled = true;
-            this.register_subject_cb_student.Location = new System.Drawing.Point(144, 667);
+            this.register_subject_cb_student.Location = new System.Drawing.Point(12, 667);
             this.register_subject_cb_student.Name = "register_subject_cb_student";
             this.register_subject_cb_student.Size = new System.Drawing.Size(145, 23);
             this.register_subject_cb_student.TabIndex = 23;
             // 
             // register_subject_button
             // 
-            this.register_subject_button.Location = new System.Drawing.Point(328, 641);
+            this.register_subject_button.Location = new System.Drawing.Point(163, 641);
             this.register_subject_button.Name = "register_subject_button";
             this.register_subject_button.Size = new System.Drawing.Size(75, 23);
             this.register_subject_button.TabIndex = 24;
@@ -562,7 +564,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(582, 562);
+            this.label14.Location = new System.Drawing.Point(582, 579);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(159, 15);
             this.label14.TabIndex = 25;
@@ -571,14 +573,14 @@
             // export_students_subjects_cb
             // 
             this.export_students_subjects_cb.FormattingEnabled = true;
-            this.export_students_subjects_cb.Location = new System.Drawing.Point(485, 605);
+            this.export_students_subjects_cb.Location = new System.Drawing.Point(485, 622);
             this.export_students_subjects_cb.Name = "export_students_subjects_cb";
             this.export_students_subjects_cb.Size = new System.Drawing.Size(159, 23);
             this.export_students_subjects_cb.TabIndex = 26;
             // 
             // export_students_btn
             // 
-            this.export_students_btn.Location = new System.Drawing.Point(627, 649);
+            this.export_students_btn.Location = new System.Drawing.Point(627, 666);
             this.export_students_btn.Name = "export_students_btn";
             this.export_students_btn.Size = new System.Drawing.Size(75, 23);
             this.export_students_btn.TabIndex = 27;
@@ -589,7 +591,7 @@
             // export_students_format_cb
             // 
             this.export_students_format_cb.FormattingEnabled = true;
-            this.export_students_format_cb.Location = new System.Drawing.Point(679, 605);
+            this.export_students_format_cb.Location = new System.Drawing.Point(679, 622);
             this.export_students_format_cb.Name = "export_students_format_cb";
             this.export_students_format_cb.Size = new System.Drawing.Size(159, 23);
             this.export_students_format_cb.TabIndex = 28;
@@ -597,7 +599,7 @@
             // export_students_lbl1
             // 
             this.export_students_lbl1.AutoSize = true;
-            this.export_students_lbl1.Location = new System.Drawing.Point(546, 584);
+            this.export_students_lbl1.Location = new System.Drawing.Point(546, 601);
             this.export_students_lbl1.Name = "export_students_lbl1";
             this.export_students_lbl1.Size = new System.Drawing.Size(47, 15);
             this.export_students_lbl1.TabIndex = 29;
@@ -606,17 +608,39 @@
             // export_students_lbl2
             // 
             this.export_students_lbl2.AutoSize = true;
-            this.export_students_lbl2.Location = new System.Drawing.Point(740, 578);
+            this.export_students_lbl2.Location = new System.Drawing.Point(740, 595);
             this.export_students_lbl2.Name = "export_students_lbl2";
             this.export_students_lbl2.Size = new System.Drawing.Size(52, 15);
             this.export_students_lbl2.TabIndex = 30;
             this.export_students_lbl2.Text = "Formato";
+            // 
+            // import_students_lb
+            // 
+            this.import_students_lb.AutoSize = true;
+            this.import_students_lb.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.import_students_lb.Location = new System.Drawing.Point(295, 579);
+            this.import_students_lb.Name = "import_students_lb";
+            this.import_students_lb.Size = new System.Drawing.Size(127, 20);
+            this.import_students_lb.TabIndex = 31;
+            this.import_students_lb.Text = "Importar alumnos";
+            // 
+            // import_students_btn
+            // 
+            this.import_students_btn.Location = new System.Drawing.Point(315, 623);
+            this.import_students_btn.Name = "import_students_btn";
+            this.import_students_btn.Size = new System.Drawing.Size(75, 23);
+            this.import_students_btn.TabIndex = 32;
+            this.import_students_btn.Text = "Importar";
+            this.import_students_btn.UseVisualStyleBackColor = true;
+            this.import_students_btn.Click += new System.EventHandler(this.import_students_btn_Click);
             // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(865, 749);
+            this.Controls.Add(this.import_students_btn);
+            this.Controls.Add(this.import_students_lb);
             this.Controls.Add(this.export_students_lbl2);
             this.Controls.Add(this.export_students_lbl1);
             this.Controls.Add(this.export_students_format_cb);
@@ -711,5 +735,7 @@
         private System.Windows.Forms.ComboBox export_students_format_cb;
         private System.Windows.Forms.Label export_students_lbl1;
         private System.Windows.Forms.Label export_students_lbl2;
+        private System.Windows.Forms.Label import_students_lb;
+        private System.Windows.Forms.Button import_students_btn;
     }
 }

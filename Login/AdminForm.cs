@@ -319,6 +319,20 @@ namespace Login
             }
         }
 
+        private void import_students_btn_Click(object sender, EventArgs e)
+        {
+            bool r = loggedAdmin.DeserializeFromJson("students.json", Data.Students);
+
+            if (r)
+            {
+                MessageBox.Show("Alumnos importados");
+            }
+            else
+            {
+                MessageBox.Show("Hubo un error en la importación de alumnos.");
+            }
+        }
+
         private void RefreshForm()
         {
             Hide();

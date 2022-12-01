@@ -10,5 +10,7 @@ namespace ClassLibrary
     {
         public bool SerializeToJson(List<T> list);
         public bool SerializeToCsv(List<T> list);
+
+        public bool DeserializeFromJson(string path, List<T> list);
     }
 }
