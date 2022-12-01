@@ -632,21 +632,6 @@ namespace Login
             return null;
         }
 
-        public static Professor? FindProfessorById(int id)
-        {
-            if (id > 0)
-            {
-                foreach (Professor professor in _professors)
-                {
-                    if (professor.Id == id)
-                    {
-                        return professor;
-                    }
-                }
-            }
-
-            return null;
-        }
 
         public static User? FindUserById(int id)
         {
@@ -695,23 +680,6 @@ namespace Login
 
             return null;
         }
-
-        public static Subject? FindSubjectById(short subjectId)
-        {
-            if (subjectId > 0)
-            {
-                foreach (Subject subject in _subjects)
-                {
-                    if (subject.Id == subjectId)
-                    {
-                        return subject;
-                    }
-                }
-            }
-
-            return null;
-        }
-
 
         public static SubjectInCourse? FindSubjectInCourseByName(string? name)
         {

@@ -191,7 +191,6 @@ namespace Login
         private void create_subject_button_Click(object sender, EventArgs e)
         {
             #region Create Subject Form Data
-            short newId = loggedAdmin.GetNewSubjectId(Data.Subjects);
             string name = create_subject_name.Text;
             short subjectQuarter;
             if (create_subject_firstQuarter.Checked)
@@ -227,11 +226,11 @@ namespace Login
             {
                 string email = emailAux;
                 short subjectId = short.Parse(subjectIdAux);
-                Professor? professor = Data.FindProfessorByEmail(email);
+                Professor? professor = loggedAdmin.FindProfessorByEmail(email, Data.Professors);
                 if (professor is not null)
                 {
                     AssignCallback assignFunction = new AssignCallback(Data.AssignProfessorToSubject);
-                    Subject? subject = Data.FindSubjectById(subjectId);
+                    Subject? subject = loggedAdmin.FindSubjectById(subjectId,Data.Subjects);
                     if(subject is not null)
                     {
                         bool r = loggedAdmin.AssignProfessorToSubject(assignFunction, Data.SubjectsInCourses, professor.Id, subject.Name, 1);

@@ -59,22 +59,9 @@ namespace ClassLibrary
             return r;
         }
 
-
-        public short GetNewSubjectId(List<Subject> subjectList)
-        {
-            int max = 0;
-            foreach (Subject subject in subjectList)
-            {
-                if (subject.Id > max)
-                    max = subject.Id;
-            }
-
-            return (short)(max += 1);
-        }
-
         public Student FindStudentByEmail(List<Student> students, string email)
         {
-            if (students is not null && email is not null)
+            if (students is not null && email != "")
             {
                 foreach (Student student in students)
                 {
@@ -96,8 +83,7 @@ namespace ClassLibrary
                 {
                     if (subject.Name == name)
                     {
-                        SubjectInCourse subjectInCourse = new();
-                        subjectInCourse = subject;
+                        SubjectInCourse subjectInCourse = subject;
                         return subjectInCourse;
                     }
                 }
@@ -105,10 +91,42 @@ namespace ClassLibrary
             return null;
         }
 
+        public Professor FindProfessorByEmail(string email, List<Professor> professorsList)
+        {
+            if (email != "" && professorsList.Count > 0)
+            {
+                foreach (Professor professor in professorsList)
+                {
+                    if (professor.Email == email)
+                    {
+                        return professor;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public Subject FindSubjectById(short subjectId, List<Subject> subjects)
+        {
+            if (subjectId > 0 && subjects.Count > 0)
+            {
+                foreach (Subject subject in subjects)
+                {
+                    if (subject.Id == subjectId)
+                    {
+                        return subject;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public bool SerializeToJson(List<Student> students)
         {
             bool r = false;
-            if (students is not null)
+            if (students.Count > 0)
             {
                 r = true;
                 string fileName = "studentsInJson.json";
@@ -123,7 +141,7 @@ namespace ClassLibrary
         public bool SerializeToCsv(List<Student> students)
         {
             bool r = false;
-            if (students is not null)
+            if (students.Count > 0)
             {
                 StringBuilder sb = new StringBuilder();
                 string fileName = "studentsInCsv";
